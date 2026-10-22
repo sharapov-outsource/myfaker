@@ -1,0 +1,110 @@
+/* ==========================================================================
+   myfaker — the little the shared stylesheet does not already draw: the
+   options above the report, values that copy themselves, and the table that
+   picks who the cards show.
+   ========================================================================== */
+
+/* The last line of the mark is a stroke, so it takes the accent as one. */
+.logo .accent.line { fill: none; stroke: var(--brand) }
+
+/* ---------- options ---------- */
+.search { align-items: flex-end }
+.option { display: flex; flex-direction: column; gap: 5px; min-width: 0 }
+.option.grow { flex: 1 1 220px }
+.option.grow select { width: 100% }
+.option-label {
+  font-family: var(--font-mono-i18n); font-size: 10.5px; letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+}
+.search .primary { padding-inline: 22px }
+/* As the shared headings do: no capitals to make, and letters that must join. */
+:is([lang=ar], [lang=zh], [lang=ja], [lang=hi]) .option-label { text-transform: none; letter-spacing: .02em }
+@media (max-width: 560px) {
+  .option { flex: 1 1 40% }
+  .option select { width: 100% }
+  .search .primary { flex: 1 0 100%; justify-content: center }
+}
+
+/* ---------- hero ---------- */
+.grade-badge.country { background: var(--brand); color: var(--on-brand); font-size: 40px }
+/* The siblings put Latin words under the badge and in the chips; here it is a
+   country's name and labels in any script, and Arabic letters only join in a
+   face that has them. */
+#country-caption, .hero-meta .chip { font-family: var(--font-mono-i18n) }
+/* A name is words, in whatever direction its script runs. */
+.host.person {
+  direction: inherit; unicode-bidi: plaintext;
+  word-break: normal; overflow-wrap: anywhere;
+}
+.hero-meta button.chip {
+  font-family: var(--font-mono-i18n); font-size: 11.5px; font-weight: 400;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  background: var(--card); border: 1px solid var(--line); color: var(--ink-soft);
+}
+.hero-meta button.chip:hover { border-color: var(--ink); color: var(--ink) }
+.hero-meta .chip.link { color: var(--brand); border-color: color-mix(in srgb, var(--brand) 35%, transparent) }
+
+/* ---------- values that copy themselves ---------- */
+.row .k small {
+  display: block; margin-top: 1px;
+  font-size: 11px; color: var(--ink-faint);
+}
+.row.sub { padding-inline-start: 14px }
+.row.sub .k { font-size: 12px }
+.row .v { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px 8px }
+
+button.value, button.alt, button.block {
+  font: inherit; color: inherit; cursor: copy; transition: background var(--t-fast), border-color var(--t-fast);
+}
+button.value {
+  background: none; border: none; padding: 1px 4px; margin: -1px -4px;
+  border-radius: var(--radius-xs); text-align: end; display: inline;
+  unicode-bidi: plaintext; word-break: break-word; overflow-wrap: anywhere;
+}
+button.value:hover { background: var(--brand-tint); color: var(--brand-ink) }
+button.alt {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint);
+  background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-pill);
+  padding: 1px 8px; direction: ltr;
+}
+button.alt:hover { border-color: var(--ink); color: var(--ink); background: var(--bg-alt) }
+
+/* An address as it goes on an envelope, copied in one go. */
+button.block {
+  display: block; width: 100%; margin: 2px 0 10px; padding: 12px 14px;
+  font-family: var(--font-mono-i18n); font-size: 13px; line-height: 1.6; text-align: start;
+  background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  unicode-bidi: plaintext; white-space: normal; overflow-wrap: anywhere;
+}
+button.block:hover { border-color: var(--brand); background: var(--bg-alt) }
+button.block[dir=ltr] { text-align: left }
+
+.empty-note { color: var(--ink-faint); font-size: 13px; padding: 4px 0 8px }
+
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px 0 4px }
+.card-actions button,
+.card-actions a.button { font-size: 12.5px; padding: 7px 12px }
+/* A download is a link, so that the browser saves it; it looks like the buttons beside it. */
+.card-actions a.button {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  font-family: var(--font-body); font-weight: 500; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-sm); transition: all var(--t-fast);
+}
+.card-actions a.button:hover { border-color: var(--ink); background: var(--bg-alt) }
+.card-actions .mark { font-family: var(--font-mono); font-size: 13px; opacity: .7 }
+
+/* ---------- everyone ---------- */
+.table.people tbody tr { cursor: pointer }
+.table.people tbody tr:hover td { background: var(--bg-alt) }
+.table.people tbody tr.selected td { background: var(--brand-tint); color: var(--brand-ink) }
+.table.people tbody tr:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px }
+.table.people td:first-child { color: var(--ink-faint); width: 1% }
+.table.people td.mono { white-space: nowrap }
+
+#report.loading { opacity: .55; transition: opacity var(--t-fast) }
+
+ul.notes { margin: 0 0 12px; padding-inline-start: 18px; color: var(--ink-soft); font-size: 13px; line-height: 1.6 }
+ul.notes li { margin: 6px 0 }
+
+/* For the copy fallback: a textarea that has to exist but not be seen. */
+.offscreen { position: fixed; inset-inline-start: -9999px; top: 0; opacity: 0; pointer-events: none }

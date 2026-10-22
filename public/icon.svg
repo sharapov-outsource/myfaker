@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Fake Data">
+  <!-- An identity card without the card: a person and three lines of particulars, the last one made up. -->
+  <rect width="1024" height="1024" rx="336" fill="#14110c"/>
+  <circle cx="380" cy="420" r="100" fill="#f5efe2"/>
+  <path d="M200 720 A180 180 0 0 1 560 720 Z" fill="#f5efe2"/>
+  <path d="M620 400 H820 M620 520 H820" stroke="#f5efe2" stroke-width="64" stroke-linecap="round"/>
+  <path d="M620 640 H740" stroke="#3a3aa6" stroke-width="64" stroke-linecap="round"/>
+</svg>

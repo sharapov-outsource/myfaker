@@ -1,0 +1,35 @@
+{
+  "name": "myfaker",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://myfaker.sharapov.biz",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharapov-outsource/myfaker.git"
+  },
+  "bugs": "https://github.com/sharapov-outsource/myfaker/issues",
+  "description": "Test people for filling in forms: names, addresses, phone numbers and documents the way each country writes them, with check digits that pass validation",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "fake": "node scripts/fake-cli.js",
+    "icons": "node scripts/make-icons.js",
+    "check:i18n": "node scripts/check-i18n.js",
+    "check:syntax": "for f in public/app.js public/i18n.js server/*.js server/countries/*.js scripts/*.js; do node --check \"$f\" || exit 1; done",
+    "test:unit": "node --test \"test/*.test.js\"",
+    "smoke": "node scripts/smoke.js",
+    "test": "npm run check:syntax && npm run check:i18n && npm run test:unit && npm run smoke"
+  },
+  "dependencies": {
+    "@fastify/rate-limit": "^10.2.2",
+    "@fastify/static": "^10.1.2",
+    "@sharapov/service-kit": "git+https://github.com/sharapov-outsource/service-kit.git#v1.6.0",
+    "fastify": "^5.2.1",
+    "yaml": "^2.7.0"
+  }
+}

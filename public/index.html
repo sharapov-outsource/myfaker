@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="%LANG%" dir="%DIR%">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <!-- Title and description come from the same dictionary the page uses, in the
+       language the request asked for, so a crawler that runs no JavaScript sees
+       what a visitor sees. -->
+  <title>%TITLE%</title>
+  <meta name="description" content="%DESCRIPTION%" id="meta-description">
+  <!-- Only the home page is worth indexing; a country page is a set of made-up people. -->
+  <meta name="robots" content="%ROBOTS%" id="meta-robots">
+  <link rel="canonical" href="%URL%" id="link-canonical">
+
+  <meta name="theme-color" content="#14110c" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f9f4ea" media="(prefers-color-scheme: light)">
+  <meta name="application-name" content="Fake Data">
+  <meta name="apple-mobile-web-app-title" content="Fake Data">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Fake Data">
+  <meta property="og:url" content="%URL%" id="og-url">
+  <meta property="og:locale" content="%LOCALE%" id="og-locale">
+  <meta property="og:title" content="%TITLE%" id="og-title">
+  <meta property="og:description" content="%DESCRIPTION%" id="og-description">
+  <meta property="og:image" content="%ORIGIN%/static/og-image.png" id="og-image">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Fake Data">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="%TITLE%" id="twitter-title">
+  <meta name="twitter:description" content="%DESCRIPTION%" id="twitter-description">
+  <meta name="twitter:image" content="%ORIGIN%/static/og-image.png" id="twitter-image">
+
+  <link rel="stylesheet" href="/static/kit/base.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <link rel="manifest" href="/static/site.webmanifest">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Fake Data",
+    "url": "%ORIGIN%/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "description": "%DESCRIPTION%",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "inLanguage": ["en", "ru", "es", "zh", "hi", "ar", "pt", "fr", "de", "ja", "tr", "uk"]
+  }
+  </script>
+%ANALYTICS%
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <rect class="tile" width="1024" height="1024" rx="336"/>
+          <!-- A person and three lines of particulars, the last one made up. -->
+          <circle class="glyph" cx="380" cy="420" r="100"/>
+          <path class="glyph" d="M200 720 A180 180 0 0 1 560 720 Z"/>
+          <path class="glyph" d="M620 400 H820 M620 520 H820" stroke-width="64" stroke-linecap="round"/>
+          <path class="accent line" d="M620 640 H740" stroke-width="64" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <div>
+        <div class="wordmark">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <h1 data-i18n="h1">Fake Data</h1>
+        </div>
+        <div class="sub" data-i18n="subtitle"></div>
+      </div>
+    </div>
+    <div class="tools">
+      <select id="lang" aria-label="Language"></select>
+      <button id="btn-rescan"><span class="mark" aria-hidden="true">↻</span><span data-i18n="btn_rescan"></span></button>
+      <button id="btn-copy-json"><span class="mark" aria-hidden="true">⧉</span><span data-i18n="btn_copy_json"></span></button>
+      <button id="btn-save-json"><span class="mark" aria-hidden="true">↓</span><span data-i18n="btn_save_json"></span></button>
+      <a class="ghlink" href="https://github.com/sharapov-outsource/myfaker"
+         target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <form class="search" id="gen-form">
+    <label class="option grow">
+      <span class="option-label" data-i18n="label_country"></span>
+      <select id="opt-country"></select>
+    </label>
+    <label class="option">
+      <span class="option-label" data-i18n="label_gender"></span>
+      <select id="opt-gender"></select>
+    </label>
+    <label class="option">
+      <span class="option-label" data-i18n="label_age"></span>
+      <select id="opt-age"></select>
+    </label>
+    <label class="option">
+      <span class="option-label" data-i18n="label_count"></span>
+      <select id="opt-count"></select>
+    </label>
+    <button type="submit" class="primary" id="btn-generate"><span data-i18n="btn_scan"></span></button>
+  </form>
+
+  <section class="hero" id="hero">
+    <div class="hero-grade">
+      <div class="grade-badge pending" id="country-badge">··</div>
+      <div class="grade-caption" id="country-caption"></div>
+    </div>
+    <div class="hero-main">
+      <div class="hero-label" data-i18n="hero_label"></div>
+      <div class="host-line">
+        <span class="host person" id="hero-name">…</span>
+      </div>
+      <div class="hero-meta" id="hero-meta"></div>
+    </div>
+  </section>
+
+  <div id="alerts"></div>
+
+  <main class="grid" id="report" hidden>
+
+    <section class="card">
+      <h2><span data-i18n="card_person"></span></h2>
+      <div id="person-rows"></div>
+      <div class="card-actions">
+        <button type="button" id="btn-copy-person"><span class="mark" aria-hidden="true">⧉</span><span data-i18n="btn_copy_person"></span></button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span data-i18n="card_address"></span></h2>
+      <div id="address-rows"></div>
+    </section>
+
+    <section class="card">
+      <h2><span data-i18n="card_contacts"></span></h2>
+      <div id="contact-rows"></div>
+    </section>
+
+    <section class="card">
+      <h2><span data-i18n="card_documents"></span></h2>
+      <div id="document-rows"></div>
+    </section>
+
+    <section class="card" id="money-card">
+      <h2><span data-i18n="card_money"></span></h2>
+      <div id="money-rows"></div>
+    </section>
+
+    <section class="card" id="company-card">
+      <h2><span data-i18n="card_company"></span></h2>
+      <div id="company-rows"></div>
+    </section>
+
+    <section class="card wide" id="people-card">
+      <h2><span data-i18n="card_people"></span></h2>
+      <div class="table-wrap">
+        <table class="table people stacks">
+          <thead><tr>
+            <th>#</th><th data-i18n="th_name"></th><th data-i18n="th_birth"></th>
+            <th data-i18n="th_phone"></th><th data-i18n="th_email"></th><th data-i18n="th_city"></th>
+          </tr></thead>
+          <tbody id="people-rows"></tbody>
+        </table>
+      </div>
+      <div class="card-actions">
+        <button type="button" id="btn-copy-csv"><span class="mark" aria-hidden="true">⧉</span><span data-i18n="btn_copy_csv"></span></button>
+        <a class="button" id="btn-save-csv" href="#" download><span class="mark" aria-hidden="true">↓</span><span data-i18n="btn_save_csv"></span></a>
+      </div>
+      <div class="note" data-i18n="note_people"></div>
+    </section>
+
+    <section class="card wide">
+      <h2><span data-i18n="card_notes"></span></h2>
+      <ul class="notes">
+        <li data-i18n="note_documents"></li>
+        <li data-i18n="note_contacts"></li>
+        <li data-i18n="note_cards"></li>
+        <li data-i18n="note_seed"></li>
+      </ul>
+    </section>
+
+    <section class="card wide">
+      <h2><span data-i18n="card_raw"></span></h2>
+      <pre class="raw" id="raw-json">…</pre>
+    </section>
+
+  </main>
+
+  <footer>
+    %SERVICES%
+    <p id="api-hint"></p>
+    <p><span data-i18n="footer1"></span><br><span data-i18n="footer2"></span><br><span data-i18n="footer3"></span></p>
+    <a class="footer-credit" href="https://sharapov.biz"
+       target="_blank" rel="noopener noreferrer" aria-label="Sharapov">
+      <img src="/static/kit/sharapov.svg" alt="Sharapov" width="72" height="16">
+    </a>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/static/kit/i18n-common.js"></script>
+<script src="/static/i18n.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
