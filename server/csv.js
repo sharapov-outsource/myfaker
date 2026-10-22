@@ -7,9 +7,13 @@
  * only some people hold — a passport not yet issued to a child — leaves its
  * cell empty for the rest.
  *
- * Values are written the way a person would type them (`value`, not `raw`):
- * a form takes the formatted SNILS as readily as the bare digits, and leading
- * zeros survive a spreadsheet only as text.
+ * Values are written the way a person would type them (`value`, not `raw`),
+ * card and account numbers included: a form takes the formatted number as
+ * readily as the bare digits, and a spreadsheet keeps "4276 1234 5678 9012"
+ * as text where it turns 4276123456789012 into 4.27612E+15 and loses a digit.
+ * A CSV carries no types, though, and a spreadsheet still guesses: a PESEL
+ * with a leading zero or an E.164 number with its plus is safest imported as
+ * a text column.
  */
 
 const column = id => String(id).replace(/[^a-z0-9]+/gi, '_').toLowerCase();
@@ -58,7 +62,7 @@ function flatten(person) {
 
   if (person.card) {
     put('card_network', person.card.networkName);
-    put('card_number', person.card.raw);
+    put('card_number', person.card.number);
     put('card_expiry', person.card.expiry);
     put('card_cvv', person.card.cvv);
     put('card_holder', person.card.holder);
@@ -66,7 +70,7 @@ function flatten(person) {
   }
   if (person.bank) {
     put('bank', person.bank.name);
-    for (const field of person.bank.fields) put(`bank_${column(field.id)}`, field.raw ?? field.value);
+    for (const field of person.bank.fields) put(`bank_${column(field.id)}`, field.value);
   }
   if (person.company) {
     put('company', person.company.name);

@@ -60,10 +60,18 @@ function tCode(prefix, code) {
 
 const locale = () => window.LANG_LOCALES?.[LANG] || LANG;
 
+/* One formatter per language, not one per name: the country menu alone asks for nineteen. */
+const regionNames = new Map();
+
 /** A country's name in the interface language, from the browser's own ICU data. */
 function countryName(code) {
-  try { return new Intl.DisplayNames([locale()], { type: 'region' }).of(code.toUpperCase()); }
-  catch { return code.toUpperCase(); }
+  const tag = locale();
+  try {
+    if (!regionNames.has(tag)) regionNames.set(tag, new Intl.DisplayNames([tag], { type: 'region' }));
+    return regionNames.get(tag).of(code.toUpperCase());
+  } catch {
+    return code.toUpperCase();
+  }
 }
 
 /* ================================================================== *
@@ -102,31 +110,61 @@ let OPTIONS = { country: null, ...DEFAULTS, seed: null };
 let PINNED = false;
 let REQUEST = 0;
 
-function optionsQuery({ withSeed = true } = {}) {
+function optionsQuery(options = OPTIONS) {
   const query = new URLSearchParams();
-  if (withSeed && OPTIONS.seed) query.set('seed', OPTIONS.seed);
-  if (OPTIONS.count !== DEFAULTS.count) query.set('count', String(OPTIONS.count));
-  if (OPTIONS.gender !== DEFAULTS.gender) query.set('gender', OPTIONS.gender);
-  if (OPTIONS.age !== DEFAULTS.age) query.set('age', OPTIONS.age);
+  if (options.seed) query.set('seed', options.seed);
+  if (options.count !== DEFAULTS.count) query.set('count', String(options.count));
+  if (options.gender !== DEFAULTS.gender) query.set('gender', options.gender);
+  if (options.age !== DEFAULTS.age) query.set('age', options.age);
   return query;
 }
 
-const pagePath = () => `/${OPTIONS.country}${optionsQuery().toString() ? '?' + optionsQuery() : ''}`;
+function pagePath(options = OPTIONS) {
+  const query = optionsQuery(options).toString();
+  return `/${options.country}${query ? '?' + query : ''}`;
+}
+
 const apiPath = extra => {
   const query = optionsQuery();
   for (const [name, value] of Object.entries(extra || {})) query.set(name, value);
   return `/api/${OPTIONS.country}?${query}`;
 };
 
-function fromLocation() {
+/** The options a report was made with — what the people on screen came from. */
+function reportOptions(report) {
+  const { min, max } = report.age;
+  return {
+    country: report.country, seed: report.seed, count: report.count, gender: report.gender,
+    age: min === max ? String(min) : `${min}-${max}`,
+  };
+}
+
+/**
+ * The country the path names. On arrival the server has already read it —
+ * `pt-BR`, `en_GB` and `uk` included — and says which country it found in the
+ * canonical link, so the page keeps no second parser of its own; the paths
+ * the page pushes itself are plain codes.
+ */
+function countryFromPath(segment, arrival) {
+  if (!segment) return { country: defaultCountry() };
+  if (COUNTRIES.includes(segment)) return { country: segment };
+  if (arrival) {
+    const resolved = new URL(byId('link-canonical').href).pathname.slice(1);
+    if (COUNTRIES.includes(resolved)) return { country: resolved };
+  }
+  return { country: defaultCountry(), error: 'unknown-country' };
+}
+
+/** Reads the address bar into OPTIONS; returns the error code when it names no country. */
+function fromLocation({ arrival = false } = {}) {
   const segment = decodeURIComponent(location.pathname.replace(/^\//, '').split('/')[0] || '').toLowerCase();
   const query = new URLSearchParams(location.search);
-  const country = segment === 'uk' ? 'gb' : segment;
+  const { country, error } = countryFromPath(segment, arrival);
   const count = Number(query.get('count'));
   const gender = String(query.get('gender') || '').toLowerCase();
   const age = String(query.get('age') || '').replace('–', '-');
   OPTIONS = {
-    country: COUNTRIES.includes(country) ? country : defaultCountry(),
+    country,
     gender: GENDERS.includes(gender) ? gender : DEFAULTS.gender,
     /* An age typed into the URL that is not one of the presets still works:
        the server takes any range, the menu just gains an entry for it. */
@@ -135,6 +173,7 @@ function fromLocation() {
     seed: query.get('seed') || null,
   };
   PINNED = Boolean(segment);
+  return error;
 }
 
 /* ================================================================== *
@@ -447,7 +486,14 @@ function fill(select, entries, current) {
   select.value = String(current);
 }
 
+/* The menus are rebuilt when the language or a choice in them changes, not on
+   every repaint — picking a row of the table repaints the whole report. */
+let BUILT = '';
+
 function buildOptions() {
+  const built = [LANG, OPTIONS.country, OPTIONS.gender, OPTIONS.age, OPTIONS.count].join('|');
+  if (built === BUILT) return;
+  BUILT = built;
   const collator = new Intl.Collator(locale());
   const countries = COUNTRIES.map(code => [code, countryName(code)]).sort((a, b) => collator.compare(a[1], b[1]));
   fill(byId('opt-country'), countries, OPTIONS.country);
@@ -556,8 +602,10 @@ document.addEventListener('click', event => {
     copyText(target.dataset.copy);
     return;
   }
+  /* From the report, not from the form: while new people are on their way the
+     form already holds their options, and the link is to the people on screen. */
   if (event.target.closest('#btn-copy-link') && REPORT) {
-    copyText(location.origin + `/${REPORT.country}?${optionsQuery()}`);
+    copyText(location.origin + pagePath(reportOptions(REPORT)));
     return;
   }
   const choice = event.target.closest('#people-rows tr[data-index]');
@@ -577,12 +625,23 @@ byId('people-rows').addEventListener('keydown', event => {
 });
 
 window.addEventListener('popstate', () => {
-  fromLocation();
+  const error = fromLocation();
   SELECTED = 0;
-  load();
+  if (error) {
+    LAST_ERROR = { error };
+    REPORT = null;
+    render();
+  } else {
+    load();
+  }
 });
 
-fromLocation();
+const arrivalError = fromLocation({ arrival: true });
 buildLanguageSelect();
 applyStaticText();
-load();
+if (arrivalError) {
+  LAST_ERROR = { error: arrivalError };
+  render();
+} else {
+  load();
+}

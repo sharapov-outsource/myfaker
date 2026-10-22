@@ -69,7 +69,9 @@ export function parseOptions(query = {}) {
     if (count < 1 || count > MAX_COUNT) return { error: 'bad-count' };
   }
 
-  const gender = GENDER_ALIASES[String(one(query.gender) ?? '').trim().toLowerCase()];
+  /* Own keys only: `constructor` is in every object literal's prototype. */
+  const wantedGender = String(one(query.gender) ?? '').trim().toLowerCase();
+  const gender = Object.hasOwn(GENDER_ALIASES, wantedGender) ? GENDER_ALIASES[wantedGender] : null;
   if (!gender) return { error: 'unknown-gender' };
 
   let age = DEFAULT_AGE;
@@ -139,12 +141,16 @@ function online(r, latin, birth) {
 /* No 0/O, 1/l/I: a password read off a screen has to survive being retyped. */
 const PASSWORD_SETS = ['ABCDEFGHJKLMNPQRSTUVWXYZ', 'abcdefghijkmnopqrstuvwxyz', '23456789', '!#$%&*+-=?@^_'];
 
-/** Fourteen characters with every class a password policy asks for. */
+/**
+ * Fourteen characters with every class a password policy asks for. The first
+ * is a letter: a password opening with = + - or @ is read as a formula by a
+ * spreadsheet the CSV is opened in, and some forms trim a leading symbol.
+ */
 export function password(r, length = 14) {
   const chars = PASSWORD_SETS.map(set => r.from(set));
   const all = PASSWORD_SETS.join('');
-  while (chars.length < length) chars.push(r.from(all));
-  return r.shuffle(chars).join('');
+  while (chars.length < length - 1) chars.push(r.from(all));
+  return r.from(PASSWORD_SETS[0] + PASSWORD_SETS[1]) + r.shuffle(chars).join('');
 }
 
 /* ------------------------------------------------------------------ *

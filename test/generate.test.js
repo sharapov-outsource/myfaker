@@ -12,7 +12,7 @@ import { readFileSync } from 'node:fs';
 
 import { generate, parseCountry, parseOptions, COUNTRY_IDS, MAX_COUNT } from '../server/generate.js';
 import { COUNTRIES } from '../server/countries/index.js';
-import { luhnValid, ibanValid, yearsBetween } from '../server/parts.js';
+import { luhnValid, ibanValid, yearsBetween, addYears } from '../server/parts.js';
 import { latinRu, latinUk, latinKk } from '../server/translit.js';
 import { feminine as feminineRu } from '../server/countries/ru.js';
 import { feminine as feminineUk } from '../server/countries/ua.js';
@@ -56,6 +56,10 @@ test('options are checked, not quietly replaced', () => {
   assert.equal(parseOptions({ count: String(MAX_COUNT + 1) }).error, 'bad-count');
   assert.equal(parseOptions({ count: 'ten' }).error, 'bad-count');
   assert.equal(parseOptions({ gender: 'other' }).error, 'unknown-gender');
+  /* Names every object literal inherits are not genders either. */
+  for (const inherited of ['constructor', 'toString', '__proto__', 'hasOwnProperty']) {
+    assert.equal(parseOptions({ gender: inherited }).error, 'unknown-gender', inherited);
+  }
   assert.equal(parseOptions({ age: '40-30' }).error, 'bad-age');
   assert.equal(parseOptions({ age: '18-120' }).error, 'bad-age');
   assert.equal(parseOptions({ seed: 'a b' }).error, 'bad-seed');
@@ -110,6 +114,25 @@ test('a gender asked for is the gender given, and names agree with it', () => {
   assert.ok(mixed.includes('female') && mixed.includes('male'));
 });
 
+test('a leap-day birthday is reached on 1 March, by both date helpers', () => {
+  const born = new Date(Date.UTC(2008, 1, 29));
+  assert.equal(addYears(born, 18).toISOString().slice(0, 10), '2026-03-01');
+  assert.equal(yearsBetween(born, new Date(Date.UTC(2026, 1, 28))), 17);
+  assert.equal(yearsBetween(born, new Date(Date.UTC(2026, 2, 1))), 18);
+});
+
+test('an identity document a person holds today has not expired', () => {
+  const parse = value => new Date(Date.UTC(...value.split('.').reverse().map((part, i) => Number(part) - (i === 1 ? 1 : 0))));
+  for (const country of ['ua', 'kz']) {
+    for (const person of people(country, { count: 100, age: { min: 14, max: 90 } })) {
+      const card = person.documents.find(doc => doc.id === 'id-card');
+      if (!card) continue;
+      const expires = card.details.find(detail => detail.id === 'expires').value;
+      assert.ok(parse(expires) >= TODAY, `${country}: ${expires}`);
+    }
+  }
+});
+
 test('children get no card, no company and no documents they are too young for', () => {
   for (const person of people('ru', { count: 30, age: { min: 5, max: 10 } })) {
     assert.equal(person.card, undefined);
@@ -133,7 +156,7 @@ test('every person of every country has what a form asks for', () => {
       assert.ok(person.phone.national && person.phone.international, where);
       assert.match(person.email, /^[a-z0-9._]+@example\.(com|net|org)$/, where);
       assert.match(person.username, /^[a-z0-9._]+$/, where);
-      assert.match(person.password, /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d]).{14}$/, where);
+      assert.match(person.password, /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z].{13}$/, where);
       assert.ok(person.documents.length >= 1, where);
       for (const doc of person.documents) {
         assert.ok(doc.id && doc.name && doc.kind && doc.value, `${where}: ${JSON.stringify(doc)}`);
@@ -197,5 +220,8 @@ test('CSV: one header, one line per person, quoted where it has to be', () => {
   }
   /* The one-line address has commas in it, so it arrives quoted. */
   assert.ok(lines[1].includes(`"${report.people[0].address.line}"`));
+  /* Long numbers as written, with their spaces: a spreadsheet keeps them as text. */
+  assert.ok(lines[1].includes(`,${report.people[0].card.number},`));
+  assert.match(report.people[0].card.number, / /);
   assert.ok(csv.endsWith('\r\n'));
 });

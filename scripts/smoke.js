@@ -159,6 +159,14 @@ async function run() {
   check('csv: download names the file',
     (download.headers.get('content-disposition') || '').includes('myfaker-br-smoke.csv'),
     download.headers.get('content-disposition'));
+  /* Bytes, not text: a decoder drops the mark it is being asked about. */
+  const opensWithBom = async response => {
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    return bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf;
+  };
+  check('csv: a download opens in Excel as UTF-8', await opensWithBom(download));
+  check('csv: what a script fetches has no byte order mark',
+    !(await opensWithBom(await fetch(`${base}/api/ru?output=csv&seed=smoke`, { headers: asCurl }))));
   const csvPage = await fetch(`${base}/us?output=csv&seed=smoke`, { headers: asBrowser });
   check('csv: from the pretty route too', (csvPage.headers.get('content-type') || '').startsWith('text/csv'));
   const csvLimited = await fetch(`${base}/api/us?output=csv`, { headers: asCurl });
@@ -174,7 +182,8 @@ async function run() {
   for (const [query, code, route = 'api/ru'] of [
     ['', 'unknown-country', 'api/zz'], ['?count=0', 'bad-count'], ['?count=101', 'bad-count'],
     ['?gender=x', 'unknown-gender'], ['?age=50-20', 'bad-age'], ['?seed=a%20b', 'bad-seed'],
-    ['?output=csv', 'unknown-country', 'api/zz'],
+    ['?output=csv', 'unknown-country', 'api/zz'], ['?output=csv', 'invalid-host', 'api/12'],
+    ['?gender=constructor', 'unknown-gender'],
   ]) {
     const refused = await fetch(`${base}/${route}${query}`, { headers: asCurl });
     const body = await refused.json();

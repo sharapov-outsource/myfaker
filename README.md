@@ -162,7 +162,14 @@ curl -s "myfaker.sharapov.biz/api/ru?count=3" | jq '.people[] | [.name.full, (.d
 ```
 
 The CSV has a column for every field the people in it have, documents by their
-`id` — `inn`, `snils`, `passport_issued` — and a line per person.
+`id` — `inn`, `snils`, `passport_issued` — and a line per person. Values are
+written as a person would type them, card numbers with their spaces, so a
+spreadsheet keeps them as text. With `?download=1` the file opens with a byte
+order mark, which is what makes Excel read it as UTF-8; a spreadsheet still
+guesses each column's type, so import the phone columns, which start with `+`,
+as text.
+
+There is no cache: a hundred people take a few milliseconds to make up.
 
 ## Running your own
 
@@ -176,8 +183,6 @@ docker run -d --name myfaker -p 127.0.0.1:3031:3031 ghcr.io/sharapov-outsource/m
 | `TRUST_PROXY` | `true` | read the client address from proxy headers. Turn **off** when facing the internet directly |
 | `RATE_SCAN_MAX` | `120` | requests for people per minute per client — generous, because a tester presses "generate" far more often than anyone re-checks a domain |
 | `RATE_MAX` | `120` | all requests per minute per client |
-| `CACHE_TTL_MS` | `60000` | how long a seeded report is kept |
-| `CACHE_MAX` | `50` | how many are kept; a request without a seed is never asked again |
 | `METRIKA_ID` | — | analytics counter; omitted, no analytics and a tighter policy |
 | `HSTS` | — | set to `true` behind TLS |
 
@@ -412,7 +417,13 @@ curl -s "myfaker.sharapov.biz/api/ru?count=3" | jq '.people[] | [.name.full, (.d
 ```
 
 В CSV по столбцу на каждое поле, которое есть у людей в нём, документы — по своим
-`id`: `inn`, `snils`, `passport_issued`, — и по строке на человека.
+`id`: `inn`, `snils`, `passport_issued`, — и по строке на человека. Значения
+записаны так, как их ввёл бы человек, номера карт — с пробелами, поэтому таблица
+оставляет их текстом. С `?download=1` файл начинается с метки порядка байтов —
+без неё Excel не читает UTF-8; тип каждого столбца таблица всё равно угадывает,
+так что столбцы телефонов, начинающиеся с `+`, импортируйте как текст.
+
+Кэша нет: сотня людей придумывается за несколько миллисекунд.
 
 ### Запуск своего экземпляра
 
@@ -426,8 +437,6 @@ docker run -d --name myfaker -p 127.0.0.1:3031:3031 ghcr.io/sharapov-outsource/m
 | `TRUST_PROXY` | `true` | брать адрес клиента из заголовков прокси. **Выключите**, если сервис смотрит прямо в интернет |
 | `RATE_SCAN_MAX` | `120` | запросов людей в минуту с клиента — щедро: тестировщик жмёт «Сгенерировать» куда чаще, чем кто-то перепроверяет домен |
 | `RATE_MAX` | `120` | всех запросов в минуту с клиента |
-| `CACHE_TTL_MS` | `60000` | сколько хранится отчёт с seed |
-| `CACHE_MAX` | `50` | сколько их хранится; запрос без seed никто не повторит |
 | `METRIKA_ID` | — | счётчик аналитики; без него аналитики нет, а политика строже |
 | `HSTS` | — | `true` за TLS |
 

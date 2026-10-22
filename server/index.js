@@ -32,11 +32,13 @@ import { toCsv } from './csv.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-/* A request without a seed never repeats, so a report is kept only for the
-   minute a seeded link is likely to be opened twice in, and only a few of
-   them. Making people up is cheap; the limit on doing it can be generous. */
-process.env.CACHE_TTL_MS ??= String(60 * 1000);
-process.env.CACHE_MAX ??= '50';
+/* A hundred people take a few milliseconds to make up, so a cache would save
+   nothing — and a request without a seed gets one of its own, making a key
+   nobody can ever ask for again, whose entry would only push out the rest.
+   The shell's cache is kept to one entry that expires at once. Being cheap,
+   the limit on making people up can be generous. */
+process.env.CACHE_TTL_MS ??= '0';
+process.env.CACHE_MAX ??= '1';
 process.env.RATE_SCAN_MAX ??= '120';
 
 function parse(raw, req) {
@@ -112,7 +114,9 @@ const service = await createService({
  * CSV is not a format the shell knows, so it is answered here, before the
  * route's handler would refuse it. A preHandler rather than an onRequest hook:
  * by now the route's rate limit has been counted, and a table of a hundred
- * people is not to be had for free any more than the JSON is.
+ * people is not to be had for free any more than the JSON is. The shell's
+ * limit on runs in flight has nothing to count here: making people up is
+ * synchronous, and one finishes before the next request is read.
  */
 const CSV_ROUTES = new Set(['/:target', '/api/:target']);
 
@@ -123,11 +127,11 @@ service.app.addHook('preHandler', async (req, reply) => {
 
   const lang = service.pickLang(req);
   const target = parse(req.params.target, req);
+  /* The same answer the shell gives the JSON route, junk included: a 400. */
   if (target.error) {
-    const status = target.error === 'invalid-host' ? 404 : 400;
     return sendData(reply, 'json', {
-      statusCode: status, error: target.error, message: service.t(lang, `err_${target.error.replace(/-/g, '_')}`),
-    }, { status });
+      statusCode: 400, error: target.error, message: service.t(lang, `err_${target.error.replace(/-/g, '_')}`),
+    }, { status: 400 });
   }
 
   const report = generate(target);
@@ -136,7 +140,10 @@ service.app.addHook('preHandler', async (req, reply) => {
   return reply
     .type('text/csv; charset=utf-8')
     .header('cache-control', 'no-store')
-    .send(toCsv(report));
+    /* A file saved to disk is mostly opened in a spreadsheet, and Excel reads
+       UTF-8 as such only behind a byte order mark; Cyrillic, Arabic and kanji
+       arrive garbled without one. What a script fetches stays without it. */
+    .send((download ? '\ufeff' : '') + toCsv(report));
 });
 
 await service.start();

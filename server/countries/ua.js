@@ -11,7 +11,7 @@
  * ЄДРПОУ code with its check digit.
  */
 
-import { pad, weightedSum, formatDate, addYears, dayBetween, iban, ibanFields } from '../parts.js';
+import { pad, weightedSum, formatDate, addYears, addDays, dayBetween, iban, ibanFields } from '../parts.js';
 import { latinUk } from '../translit.js';
 
 const MALE = ('Олександр Андрій Сергій Дмитро Володимир Максим Іван Михайло Віталій Юрій Олег Богдан ' +
@@ -139,9 +139,13 @@ function documents(r, p) {
   const female = p.gender === 'female';
   const list = [{ id: 'rntrc', name: 'РНОКПП', kind: 'tax', value: rntrc(p.birth, female, r) }];
   if (p.age >= 14) {
-    /* ID cards replaced the passport booklet in 2016; a card issued before 18 is valid for four years. */
-    const from = addYears(p.birth, 14) > new Date(Date.UTC(2016, 0, 11)) ? addYears(p.birth, 14) : new Date(Date.UTC(2016, 0, 11));
-    const issued = dayBetween(r, from, p.today);
+    /* ID cards replaced the passport booklet in 2016. A card issued before 18
+       is valid for four years and one issued after for ten, and the card a
+       person holds today has not run out yet. */
+    const latest = (...dates) => new Date(Math.max(...dates));
+    const from = latest(addYears(p.birth, 14), Date.UTC(2016, 0, 11), addDays(addYears(p.today, -10), 1));
+    let issued = dayBetween(r, from, p.today);
+    if (issued < addYears(p.birth, 18)) issued = dayBetween(r, latest(from, addDays(addYears(p.today, -4), 1)), p.today);
     const expires = addYears(issued, issued < addYears(p.birth, 18) ? 4 : 10);
     list.push({
       id: 'id-card', name: 'ID-картка', kind: 'id-card', value: pad(r.int(1, 999999999), 9),

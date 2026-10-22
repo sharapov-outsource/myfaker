@@ -139,9 +139,9 @@ export function formatDate(date, pattern) {
 
 export function addYears(date, years) {
   const out = new Date(date);
+  // 29 February plus a year rolls over to 1 March, the day yearsBetween
+  // counts a leap-day birthday as reached.
   out.setUTCFullYear(out.getUTCFullYear() + years);
-  // 29 February plus a year is 1 March, not 29 February of a year without one.
-  if (out.getUTCDate() !== date.getUTCDate()) out.setUTCDate(0);
   return out;
 }
 
