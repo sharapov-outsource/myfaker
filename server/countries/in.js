@@ -97,13 +97,17 @@ function address(r, place) {
   };
 }
 
-/* Two-digit openings that libphonenumber accepts as mobile whatever follows them. */
+/*
+ * India keeps no block for fiction, and every mobile series a number could
+ * open with is in service: a number written as an Indian mobile may belong to
+ * somebody, and the report says so. These openings are mobile whatever follows.
+ */
 const MOBILE = ['70', '72', '74', '84', '85', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99'];
 
 function phone(r) {
   const number = r.pick(MOBILE) + r.digits(8);
   const spaced = `${number.slice(0, 5)} ${number.slice(5)}`;
-  return { national: `0${spaced}`, international: `+91 ${spaced}`, e164: `+91${number}` };
+  return { national: `0${spaced}`, international: `+91 ${spaced}`, e164: `+91${number}`, range: 'in-service' };
 }
 
 function documents(r, p) {

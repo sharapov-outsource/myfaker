@@ -51,6 +51,7 @@ function flatten(person) {
   put('phone', phone.national);
   put('phone_international', phone.international);
   put('phone_e164', phone.e164);
+  put('phone_range', phone.range);
   put('email', person.email);
   put('username', person.username);
   put('password', person.password);

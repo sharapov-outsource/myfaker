@@ -8,8 +8,9 @@ every number to code that has nothing to do with it —
 
   · python-stdnum for the documents it knows, with its check digits, dates and
     components;
-  · Google's libphonenumber for every phone number, which must be valid, of a
-    mobile type, and the same number in all three of its spellings;
+  · Google's libphonenumber for every phone number, which must be the same
+    number in all three of its spellings and, unless it comes from a range in
+    service, a number of the right length that nobody has been given;
   · for what stdnum has no module for, implementations written here, apart from
     the ones in server/, from the published descriptions;
   · and for numbers that encode their holder, that the birth date, sex and
@@ -208,10 +209,16 @@ def check_person(c, p, tally):
     birth = datetime.date.fromisoformat(p['birth']['date'])
     female = p['gender'] == 'female'
 
-    # Phone: valid, mobile, one number in three spellings.
+    # Phone: one number in three spellings. A number from a range in service is
+    # a valid mobile; one from a block kept for fiction or allocated to nobody
+    # has the length of a real one and is a number libphonenumber knows no
+    # owner of — except the American fiction block, which it accepts.
     number = phonenumbers.parse(p['phone']['e164'])
-    tally(phonenumbers.is_valid_number(number) and phonenumbers.number_type(number) in
-          (PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE), f'{c}.phone', p['phone']['e164'])
+    known = phonenumbers.is_valid_number(number) and phonenumbers.number_type(number) in (
+        PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE)
+    nobodys = phonenumbers.is_possible_number(number) and not phonenumbers.is_valid_number(number)
+    expected = {'in-service': known, 'unallocated': nobodys, 'fiction': known if c == 'us' else nobodys}
+    tally(expected.get(p['phone'].get('range'), False), f"{c}.phone.{p['phone'].get('range')}", p['phone']['e164'])
     tally(phonenumbers.parse(p['phone']['national'], c.upper()) == number and
           phonenumbers.parse(p['phone']['international']) == number, f'{c}.phone.spellings', p['phone'])
     tally(re.fullmatch(r'[a-z0-9._]+@example\.(com|net|org)', p['email']) is not None, f'{c}.email', p['email'])

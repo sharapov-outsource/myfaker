@@ -3,7 +3,8 @@
  *
  * A given name and two surnames. An address as the Correios print it: street
  * and number, the bairro, city and state, and a CEP that belongs to that city;
- * a mobile number with the city's DDD and the ninth digit. A CPF whose ninth
+ * a mobile number with the ninth digit, under an area code that does not
+ * exist, so that it rings nowhere. A CPF whose ninth
  * digit names the fiscal region of the state the person lives in, followed by
  * its two check digits; a PIS/PASEP number; in São Paulo state an RG with the
  * check digit SSP-SP uses; and for a business a CNPJ for its head office.
@@ -24,22 +25,22 @@ const SURNAMES = ('Silva Santos Oliveira Souza Rodrigues Ferreira Alves Pereira 
   'Nunes Marques Machado Mendes Freitas Cardoso Ramos Gonçalves Santana Teixeira Araújo Pinto Moura ' +
   'Cavalcanti Monteiro').split(' ');
 
-/* fiscal — the CPF digit of the state's fiscal region; ddd — the city's area code. */
+/* fiscal — the CPF digit of the state's fiscal region. */
 const CITIES = [
-  { city: 'São Paulo', uf: 'SP', state: 'São Paulo', cep: [1000000, 5999999], ddd: '11', fiscal: '8' },
-  { city: 'Campinas', uf: 'SP', state: 'São Paulo', cep: [13000001, 13139999], ddd: '19', fiscal: '8' },
-  { city: 'Rio de Janeiro', uf: 'RJ', state: 'Rio de Janeiro', cep: [20000000, 23799999], ddd: '21', fiscal: '7' },
-  { city: 'Belo Horizonte', uf: 'MG', state: 'Minas Gerais', cep: [30000000, 31999999], ddd: '31', fiscal: '6' },
-  { city: 'Salvador', uf: 'BA', state: 'Bahia', cep: [40000000, 42599999], ddd: '71', fiscal: '5' },
-  { city: 'Fortaleza', uf: 'CE', state: 'Ceará', cep: [60000000, 61599999], ddd: '85', fiscal: '3' },
-  { city: 'Brasília', uf: 'DF', state: 'Distrito Federal', cep: [70000000, 72799999], ddd: '61', fiscal: '1' },
-  { city: 'Curitiba', uf: 'PR', state: 'Paraná', cep: [80000000, 82999999], ddd: '41', fiscal: '9' },
-  { city: 'Recife', uf: 'PE', state: 'Pernambuco', cep: [50000000, 52999999], ddd: '81', fiscal: '4' },
-  { city: 'Porto Alegre', uf: 'RS', state: 'Rio Grande do Sul', cep: [90000000, 91999999], ddd: '51', fiscal: '0' },
-  { city: 'Manaus', uf: 'AM', state: 'Amazonas', cep: [69000000, 69099999], ddd: '92', fiscal: '2' },
-  { city: 'Belém', uf: 'PA', state: 'Pará', cep: [66000000, 66999999], ddd: '91', fiscal: '2' },
-  { city: 'Goiânia', uf: 'GO', state: 'Goiás', cep: [74000000, 74899999], ddd: '62', fiscal: '1' },
-  { city: 'Florianópolis', uf: 'SC', state: 'Santa Catarina', cep: [88000000, 88099999], ddd: '48', fiscal: '9' },
+  { city: 'São Paulo', uf: 'SP', state: 'São Paulo', cep: [1000000, 5999999], fiscal: '8' },
+  { city: 'Campinas', uf: 'SP', state: 'São Paulo', cep: [13000001, 13139999], fiscal: '8' },
+  { city: 'Rio de Janeiro', uf: 'RJ', state: 'Rio de Janeiro', cep: [20000000, 23799999], fiscal: '7' },
+  { city: 'Belo Horizonte', uf: 'MG', state: 'Minas Gerais', cep: [30000000, 31999999], fiscal: '6' },
+  { city: 'Salvador', uf: 'BA', state: 'Bahia', cep: [40000000, 42599999], fiscal: '5' },
+  { city: 'Fortaleza', uf: 'CE', state: 'Ceará', cep: [60000000, 61599999], fiscal: '3' },
+  { city: 'Brasília', uf: 'DF', state: 'Distrito Federal', cep: [70000000, 72799999], fiscal: '1' },
+  { city: 'Curitiba', uf: 'PR', state: 'Paraná', cep: [80000000, 82999999], fiscal: '9' },
+  { city: 'Recife', uf: 'PE', state: 'Pernambuco', cep: [50000000, 52999999], fiscal: '4' },
+  { city: 'Porto Alegre', uf: 'RS', state: 'Rio Grande do Sul', cep: [90000000, 91999999], fiscal: '0' },
+  { city: 'Manaus', uf: 'AM', state: 'Amazonas', cep: [69000000, 69099999], fiscal: '2' },
+  { city: 'Belém', uf: 'PA', state: 'Pará', cep: [66000000, 66999999], fiscal: '2' },
+  { city: 'Goiânia', uf: 'GO', state: 'Goiás', cep: [74000000, 74899999], fiscal: '1' },
+  { city: 'Florianópolis', uf: 'SC', state: 'Santa Catarina', cep: [88000000, 88099999], fiscal: '9' },
 ];
 
 const BAIRROS = ('Centro|Jardim América|Vila Nova|Boa Vista|Santa Mônica|Jardim das Flores|Vila Esperança|' +
@@ -106,10 +107,21 @@ function address(r, place) {
   };
 }
 
-function phone(r, place) {
+/*
+ * Area codes Anatel has never assigned. A mobile number under one is written
+ * exactly as a real one — (DDD) 9XXXX-XXXX — and reaches nobody; the price is
+ * that its area code no longer matches the city.
+ */
+const UNASSIGNED_DDD = ['20', '23', '25', '26', '29', '30', '36', '39', '40', '50', '52', '56', '57', '58', '59', '60', '70', '72', '76', '78', '80'];
+
+function phone(r) {
+  const ddd = r.pick(UNASSIGNED_DDD);
   const rest = '9' + r.from('6789') + r.digits(7);
   const local = `${rest.slice(0, 5)}-${rest.slice(5)}`;
-  return { national: `(${place.ddd}) ${local}`, international: `+55 ${place.ddd} ${local}`, e164: `+55${place.ddd}${rest}` };
+  return {
+    national: `(${ddd}) ${local}`, international: `+55 ${ddd} ${local}`, e164: `+55${ddd}${rest}`,
+    range: 'unallocated',
+  };
 }
 
 function documents(r, p) {

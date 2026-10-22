@@ -5,7 +5,8 @@
  * every Japanese form asks for alongside the name — and in Latin letters,
  * family name first as the government has recommended since 2020. An address
  * that starts from the postcode and the prefecture and ends at the building
- * and room. A mobile number on 070, 080 or 090. A My Number with its check
+ * and room. A mobile number on 070 or 090, in the part of the series that is
+ * never issued. A My Number with its check
  * digit, a bank account given the way a transfer form wants it — bank code,
  * branch, type, number — a JCB card more often than not, and for a business,
  * a corporate number whose check digit comes first.
@@ -101,12 +102,12 @@ function address(r, place) {
   };
 }
 
+/* 070-0xxx and 090-0xxx: the 0 after the prefix is never issued (0800 is toll-free). */
 function phone(r) {
-  const prefix = r.pick(['70', '80', '90']);
-  /* 0800 is toll-free, not a mobile. */
-  const rest = r.int(1, 9) + r.digits(7);
+  const prefix = r.pick(['70', '90']);
+  const rest = '0' + r.digits(7);
   const local = `${prefix}-${rest.slice(0, 4)}-${rest.slice(4)}`;
-  return { national: `0${local}`, international: `+81 ${local}`, e164: `+81${prefix}${rest}` };
+  return { national: `0${local}`, international: `+81 ${local}`, e164: `+81${prefix}${rest}`, range: 'unallocated' };
 }
 
 function documents(r) {

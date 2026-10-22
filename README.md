@@ -22,8 +22,8 @@ cursor leaves it, and a test that types random digits never gets past the field.
 General-purpose fakers know the shape of a name and an address; they rarely know
 that a Russian passport series opens with the region's code and the year it was
 issued, that a French social security number is the person's sex, birth month and
-birthplace written out, or that libphonenumber — the check most sites run on a
-phone field — refuses the blocks some regulators set aside for fiction.
+birthplace written out, or which phone numbers are written exactly like real ones
+and still belong to nobody.
 
 So each country here is written by its own rules:
 
@@ -41,9 +41,9 @@ So each country here is written by its own rules:
   with its building and additional numbers in Saudi Arabia, in Arabic and in Latin
   letters. Each address also comes as a single line, in the order a form's one
   address field wants.
-- **Phone numbers** under a real mobile prefix, in national, international and
-  E.164 form, all of them passing libphonenumber as mobile numbers. The area code
-  agrees with the city where the country has them.
+- **Phone numbers** written exactly as the country writes them, in national,
+  international and E.164 form, and belonging to nobody — see below for how, and
+  for the two countries where that cannot be done.
 - **Documents** built the way the issuing authority builds them. Where a number
   encodes the person, it encodes this person: the birth date and sex inside a
   PESEL, a CURP, a Chinese resident ID, a Ukrainian РНОКПП, a Kazakh ИИН; the
@@ -99,13 +99,20 @@ fourteen, no card before fourteen, no company before eighteen.
 - **E-mail addresses** are at `example.com`, `example.net` and `example.org`,
   reserved by RFC 2606: mail sent there goes nowhere, whatever the system under
   test does with it.
-- **Phone numbers** in the United States come from 555-0100–0199, the block the
-  numbering plan keeps for fiction, which libphonenumber accepts. The UK and France
-  keep blocks for drama too — 07700 900xxx and 06 39 98 xx xx — but libphonenumber
-  rejects them, which would make them useless for filling in forms, so elsewhere
-  the numbers come from ranges in service and **may belong to somebody**. Do not
-  call them or text them; a test environment that sends real SMS should not be
-  given them.
+- **Phone numbers** are written exactly as each country writes them and belong to
+  nobody. In the United States they come from 555-0100–0199, in the United
+  Kingdom from 07700 900000–900999 and in France from 06 39 98 — the blocks kept
+  for fiction. Elsewhere they come from blocks the numbering plan has given to no
+  network: 0154 in Germany, 090-0… in Japan, 052 in Saudi Arabia, an area code
+  that does not exist in Brazil and Mexico, and so on. The price: libphonenumber,
+  which most sites check a phone field with, knows these blocks are empty and
+  refuses every one of them except the American, so a form that validates the
+  number will not take it. **Russia and India** keep no such block — every mobile
+  prefix there is in service — so their numbers come from real ranges and **may
+  belong to somebody**: do not call them or text them. Every phone says which it
+  is in `range`: `fiction`, `unallocated` or `in-service`. "Given to no network"
+  is true of the plan as libphonenumber's metadata knows it today; a regulator
+  can still open a block later.
 - **Card numbers** carry a real network prefix and pass the Luhn check; they belong
   to no account and no payment will go through. For a payment provider's test
   mode, use the test cards it publishes.
@@ -212,7 +219,8 @@ python3 scripts/cross-check.py                  # thousands of people, every num
 ```
 
 It generates people for every country and validates every document with
-python-stdnum and every phone number with libphonenumber, and checks what
+python-stdnum and every phone number with libphonenumber — one from a fiction
+or an unallocated block has to be the right length and unknown to it — and checks what
 stdnum has no module for — СНИЛС, ИИН, УНЗР, the German social insurance number,
 the Polish identity card — against implementations of its own, written
 separately from the ones in `server/`. It also checks that the birth date, sex
@@ -278,9 +286,8 @@ curl myfaker.sharapov.biz/ru
 проходит. Генераторы общего назначения знают, как выглядят имя и адрес, но редко
 знают, что серия российского паспорта начинается с кода региона и года выдачи,
 что французский номер социального страхования — это записанные пол, месяц и
-место рождения человека, или что libphonenumber — проверка, которой большинство
-сайтов прогоняет поле телефона, — отвергает блоки, которые регуляторы
-зарезервировали для кино.
+место рождения человека, или какие телефоны записаны в точности как настоящие и
+при этом никому не принадлежат.
 
 Поэтому каждая страна здесь сделана по своим правилам:
 
@@ -298,9 +305,9 @@ curl myfaker.sharapov.biz/ru
   национальный адрес с номером здания и дополнительным номером в Саудовской Аравии —
   по-арабски и латиницей. Каждый адрес есть и одной строкой — в том порядке, в
   каком его ждёт единственное поле «Адрес».
-- **Телефоны** — с настоящим мобильным префиксом, в национальном, международном
-  формате и E.164; все проходят libphonenumber как мобильные. Код города
-  совпадает с городом там, где коды есть.
+- **Телефоны** — в точности в том виде, в каком их пишут в стране, в
+  национальном, международном формате и E.164, и никому не принадлежат; как это
+  сделано и в каких двух странах это невозможно — ниже.
 - **Документы** собраны так, как их собирает выдающий орган. Если номер кодирует
   человека, то кодирует именно этого: дата рождения и пол внутри PESEL, CURP,
   китайского удостоверения, украинского РНОКПП, казахстанского ИИН; место рождения
@@ -356,13 +363,21 @@ curl myfaker.sharapov.biz/ru
 - **Адреса почты** — на `example.com`, `example.net` и `example.org`,
   зарезервированных RFC 2606: письмо туда никуда не уходит, что бы ни делала с ним
   тестируемая система.
-- **Телефоны** в США берутся из блока 555-0100–0199, отведённого планом нумерации
-  для вымысла, и libphonenumber его принимает. В Великобритании и Франции тоже есть
-  «киношные» блоки — 07700 900xxx и 06 39 98 xx xx, — но libphonenumber их
-  отвергает, и для заполнения форм они бесполезны. Поэтому в остальных странах
-  номера берутся из действующих диапазонов и **могут кому-то принадлежать**. Не
-  звоните на них и не отправляйте SMS; тестовому окружению, которое шлёт настоящие
-  SMS, их давать не стоит.
+- **Телефоны** записаны в точности так, как их пишут в стране, и никому не
+  принадлежат. В США они берутся из блока 555-0100–0199, в Великобритании — из
+  07700 900000–900999, во Франции — из 06 39 98: это блоки, отведённые для
+  вымысла. В остальных странах — из блоков, которые план нумерации не выделил ни
+  одному оператору: 0154 в Германии, 090-0… в Японии, 052 в Саудовской Аравии,
+  несуществующий код города в Бразилии и Мексике и так далее. Цена:
+  libphonenumber, которым большинство сайтов проверяет поле телефона, знает, что
+  эти блоки пусты, и отвергает все такие номера, кроме американских, — форма с
+  проверкой номера их не примет. **В России и Индии** таких блоков нет: все
+  мобильные префиксы там действующие, поэтому номера берутся из настоящих
+  диапазонов и **могут кому-то принадлежать** — не звоните на них и не
+  отправляйте SMS. У каждого телефона есть поле `range`: `fiction`, `unallocated`
+  или `in-service`. «Не выделен ни одному оператору» верно для плана нумерации в
+  том виде, в каком его сегодня знают метаданные libphonenumber; регулятор может
+  открыть блок позже.
 - **Номера карт** начинаются с настоящего префикса платёжной системы и проходят
   проверку Луна; они не привязаны ни к какому счёту, и платёж не пройдёт. Для
   тестового режима платёжного сервиса берите тестовые карты, которые он публикует.
@@ -467,7 +482,8 @@ python3 scripts/cross-check.py                  # тысячи людей, ка�
 ```
 
 Скрипт генерирует людей для каждой страны и проверяет каждый документ через
-python-stdnum, а каждый телефон — через libphonenumber; то, для чего в stdnum нет
+python-stdnum, а каждый телефон — через libphonenumber (номер из «киношного» или
+невыделенного блока должен быть правильной длины и неизвестен ему); то, для чего в stdnum нет
 модуля, — СНИЛС, ИИН, УНЗР, немецкий номер социального страхования, польское
 удостоверение — сверяет с собственными реализациями, написанными отдельно от
 `server/`. И ещё проверяет, что дата рождения, пол и место рождения внутри номера —

@@ -106,10 +106,11 @@ function address(r, place) {
   return { street, building, apartment, city: place.city, region: place.district, postalCode, lines, line: lines.join(', ') };
 }
 
+/* Mobiles are 91, 92, 93 and 96; 95, 97, 98 and 99 belong to no network. */
 function phone(r) {
-  const number = r.pick(['91', '92', '93', '96']) + r.digits(7);
+  const number = r.pick(['95', '97', '98', '99']) + r.digits(7);
   const spaced = `${number.slice(0, 3)} ${number.slice(3, 6)} ${number.slice(6)}`;
-  return { national: spaced, international: `+351 ${spaced}`, e164: `+351${number}` };
+  return { national: spaced, international: `+351 ${spaced}`, e164: `+351${number}`, range: 'unallocated' };
 }
 
 function documents(r) {

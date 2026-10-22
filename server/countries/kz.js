@@ -104,13 +104,14 @@ function address(r, place) {
   };
 }
 
-const MOBILE = ['700', '701', '702', '705', '707', '708', '747', '771', '775', '776', '777', '778'];
+/* 7xx codes like the operators' 700–708 and 747, but given to nobody. */
+const UNALLOCATED = ['703', '704', '709'];
 
 function phone(r) {
-  const code = r.pick(MOBILE);
+  const code = r.pick(UNALLOCATED);
   const rest = r.digits(7);
   const tail = `${rest.slice(0, 3)} ${rest.slice(3, 5)} ${rest.slice(5)}`;
-  return { national: `8 (${code}) ${tail}`, international: `+7 ${code} ${tail}`, e164: `+7${code}${rest}` };
+  return { national: `8 (${code}) ${tail}`, international: `+7 ${code} ${tail}`, e164: `+7${code}${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

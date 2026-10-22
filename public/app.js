@@ -227,12 +227,12 @@ const range = (min, max) => (String(min) === String(max) ? String(min) : `${min}
  * without its spaces and dashes — what a field with an input mask wants — and
  * gets a smaller button of its own.
  */
-function row(label, value, { raw, hint, big, sub } = {}) {
+function row(label, value, { raw, hint, warn, big, sub } = {}) {
   if (blank(value)) return '';
   const alt = !blank(raw) && raw !== value
     ? `<button type="button" class="alt" data-copy="${esc(raw)}" title="${esc(t('hint_raw'))}">${esc(raw)}</button>`
     : '';
-  return `<div class="row${sub ? ' sub' : ''}"><span class="k">${esc(label)}${hint ? `<small>${esc(hint)}</small>` : ''}</span>` +
+  return `<div class="row${sub ? ' sub' : ''}"><span class="k">${esc(label)}${hint ? `<small${warn ? ' class="warn"' : ''}>${esc(hint)}</small>` : ''}</span>` +
     `<span class="v${big ? ' big' : ''}"><button type="button" class="value" data-copy="${esc(value)}">${esc(value)}</button>${alt}</span></div>`;
 }
 
@@ -364,7 +364,10 @@ function renderAddress(report, person) {
 function renderContacts(person) {
   const phone = person.phone;
   byId('contact-rows').innerHTML = [
-    row(t('k_phone'), phone.national, { raw: phone.e164, big: true }),
+    /* A number from a range in service may be somebody's: that is the one to notice. */
+    row(t('k_phone'), phone.national, {
+      raw: phone.e164, hint: tCode('range', phone.range), warn: phone.range === 'in-service', big: true,
+    }),
     row(t('k_phone_intl'), phone.international),
     row(t('k_email'), person.email),
     row(t('k_username'), person.username),

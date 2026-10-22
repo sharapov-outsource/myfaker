@@ -101,10 +101,11 @@ function address(r, place) {
   return { street, building, apartment, city: place.city, region: place.province, postalCode, lines, line: lines.join(', ') };
 }
 
+/* 7x mobiles run from 71 to 74; 75, 76, 77 and 79 have not been allocated. */
 function phone(r) {
-  const number = '6' + r.digits(8);
+  const number = r.pick(['75', '76', '77', '79']) + r.digits(7);
   const spaced = `${number.slice(0, 3)} ${number.slice(3, 6)} ${number.slice(6)}`;
-  return { national: spaced, international: `+34 ${spaced}`, e164: `+34${number}` };
+  return { national: spaced, international: `+34 ${spaced}`, e164: `+34${number}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

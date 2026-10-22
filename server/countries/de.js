@@ -103,12 +103,10 @@ function address(r, place) {
   return { street, building, city: place.city, region: place.state, postalCode, lines, line: lines.join(', ') };
 }
 
-const MOBILE = ['151', '152', '157', '159', '160', '162', '163', '170', '171', '172', '173', '174', '175', '176', '177', '178', '179'];
-
+/* 0154: a mobile prefix of the 015x series that no network has been given. */
 function phone(r) {
-  const prefix = r.pick(MOBILE);
-  const rest = r.digits(prefix.startsWith('15') ? 8 : r.pick([7, 8]));
-  return { national: `0${prefix} ${rest}`, international: `+49 ${prefix} ${rest}`, e164: `+49${prefix}${rest}` };
+  const rest = r.digits(8);
+  return { national: `0154 ${rest}`, international: `+49 154 ${rest}`, e164: `+49154${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

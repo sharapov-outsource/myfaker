@@ -126,16 +126,14 @@ function address(r, place) {
   return { street, building, apartment, city: place.city, region: place.province, postalCode, lines, line: lines.join(', ') };
 }
 
-const MOBILE = ('501 502 503 504 505 506 507 508 510 511 512 513 514 515 516 517 600 601 602 603 604 605 ' +
-  '660 661 662 663 664 665 666 667 668 669 690 691 692 693 694 695 696 697 698 721 722 723 724 725 726 ' +
-  '727 728 729 780 781 782 783 784 785 786 787 788 789 790 791 792 793 794 795 796 797 798 799 880 881 ' +
-  '882 883 884 885 886 887 888 889').split(' ');
+/* 7xx like the mobile 72x and 78x, but in the 70x series where these three are unallocated. */
+const UNALLOCATED = ['702', '705', '709'];
 
 function phone(r) {
-  const prefix = r.pick(MOBILE);
+  const prefix = r.pick(UNALLOCATED);
   const rest = r.digits(6);
   const spaced = `${prefix} ${rest.slice(0, 3)} ${rest.slice(3)}`;
-  return { national: spaced, international: `+48 ${spaced}`, e164: `+48${prefix}${rest}` };
+  return { national: spaced, international: `+48 ${spaced}`, e164: `+48${prefix}${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

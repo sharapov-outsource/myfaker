@@ -103,6 +103,7 @@ const service = await createService({
     out.countryName = countryName(out.country, LANG_LOCALES[language] || language);
     for (const person of out.people || []) {
       person.genderLabel = tCode(language, 'gender', person.gender);
+      person.phone.rangeLabel = tCode(language, 'range', person.phone.range);
       for (const doc of [...(person.documents || []), ...(person.company?.documents || [])]) {
         doc.kindLabel = tCode(language, 'kind', doc.kind);
       }

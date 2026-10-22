@@ -2,17 +2,12 @@
  * The United Kingdom.
  *
  * An address the way Royal Mail wants it: the post town in capitals on a line
- * of its own and a postcode whose outward half belongs to that town. A National
+ * of its own and a postcode whose outward half belongs to that town. A mobile
+ * number from 07700 900000–900999, the block Ofcom keeps for drama. A National
  * Insurance number that avoids the prefixes HMRC never issues; an NHS number —
  * or, in Scotland, a CHI number built from the birth date, and in Northern
  * Ireland a Health and Care number — with its modulus 11 check; and a driving
  * licence number spelled out from the holder's surname, birth date and initials.
- *
- * Ofcom keeps 07700 900000–900999 for drama, and the numbers there would be
- * the safe ones to hand out — except that libphonenumber, which most sites
- * validate a phone field with, rejects that block outright. A number a form
- * refuses is no use for filling one in, so the mobile numbers here come from
- * ranges in service instead.
  */
 
 import { pad, weightedSum, formatDate, iban, ibanFields } from '../parts.js';
@@ -138,18 +133,13 @@ function address(r, place) {
   return { street, building, apartment, city: place.city, postalCode, lines, line: lines.join(', ') };
 }
 
-/* 07 followed by blocks allocated to mobile networks. */
-const MOBILE = ['74', '75', '77', '78', '79'];
-const MOBILE_THIRD = { 74: '01234', 75: '3456789', 77: '1234567', 78: '456789', 79: '456789' };
-
 function phone(r) {
-  const block = r.pick(MOBILE);
-  const prefix = block + r.from(MOBILE_THIRD[block]) + r.digits(1);
-  const rest = r.digits(6);
+  const tail = r.digits(3);
   return {
-    national: `0${prefix} ${rest}`,
-    international: `+44 ${prefix} ${rest}`,
-    e164: `+44${prefix}${rest}`,
+    national: `07700 900${tail}`,
+    international: `+44 7700 900${tail}`,
+    e164: `+447700900${tail}`,
+    range: 'fiction',
   };
 }
 

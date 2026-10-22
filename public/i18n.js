@@ -103,7 +103,10 @@ OWN.en = {
   /* ---- notes ---- */
   note_people: 'Click a row to show that person on the cards above. The CSV has a column for every field and a line for every person.',
   note_documents: 'Document numbers are built the way the issuing authority builds them: the birth date, sex and birthplace inside a number agree with the person, and every check digit is computed by that document’s own algorithm, so the numbers pass format validation. None of them was issued to anyone, and no registry will confirm one.',
-  note_contacts: 'E-mail addresses are at example.com, example.net and example.org — domains reserved so that mail sent to them goes nowhere. Phone numbers follow the country’s numbering plan and pass libphonenumber, the check most sites use; in the United States they come from 555-0100–0199, the block kept for fiction. Elsewhere a number may belong to somebody, so do not call it or text it.',
+  range_fiction: 'from the block kept for fiction',
+  range_unallocated: 'from a block allocated to nobody',
+  range_in_service: 'from a range in service: may belong to someone',
+  note_contacts: 'E-mail addresses are at example.com, example.net and example.org — domains reserved so that mail sent to them goes nowhere. Phone numbers are written exactly as the country writes them, and in all but two countries they are nobody’s: in the United States, the United Kingdom and France they come from the blocks kept for fiction, elsewhere from blocks the numbering plan has given to no network. libphonenumber, the check most sites run, knows that and accepts only the American ones. Russia and India keep no such block — every mobile prefix there is in service — so their numbers may belong to somebody: do not call them or text them.',
   note_cards: 'Card numbers carry a real network prefix and pass the Luhn check, so a form accepts them; they belong to no account, and no payment will go through. For a payment provider’s test mode, use the test cards it publishes.',
   note_seed: 'Every set of people comes from a seed, shown above. The same seed, country and options give the same people again — in a link, in an API call, in a test. Birth dates are counted from the current year, so the people grow older along with everybody else.',
 
@@ -208,7 +211,10 @@ OWN.ru = {
 
   note_people: 'Нажмите на строку, чтобы показать этого человека в карточках выше. В CSV по столбцу на каждое поле и по строке на каждого человека.',
   note_documents: 'Номера документов собраны так, как их собирает выдающий орган: дата рождения, пол и место рождения внутри номера совпадают с данными человека, а каждая контрольная цифра посчитана по алгоритму именно этого документа, поэтому номера проходят проверку формата. Ни один из них никому не выдавался, и ни один реестр его не подтвердит.',
-  note_contacts: 'Адреса почты — на example.com, example.net и example.org: эти домены зарезервированы, и письма на них никуда не уходят. Телефоны соответствуют плану нумерации страны и проходят libphonenumber — проверку, которой пользуется большинство сайтов; в США они берутся из блока 555-0100–0199, отведённого для вымысла. В остальных странах номер может кому-то принадлежать, поэтому не звоните на него и не отправляйте SMS.',
+  range_fiction: 'из блока, отведённого для вымысла',
+  range_unallocated: 'из блока, не выделенного никому',
+  range_in_service: 'из действующего диапазона: может кому-то принадлежать',
+  note_contacts: 'Адреса почты — на example.com, example.net и example.org: эти домены зарезервированы, и письма на них никуда не уходят. Телефоны записаны точно так, как их пишут в стране, и почти везде никому не принадлежат: в США, Великобритании и Франции они берутся из блоков, отведённых для вымысла, в остальных странах — из блоков, которые план нумерации не выделил ни одному оператору. libphonenumber — проверка, которой пользуется большинство сайтов, — знает об этом и принимает только американские. В России и Индии таких блоков нет: все мобильные префиксы там действующие, поэтому их номера могут кому-то принадлежать — не звоните на них и не отправляйте SMS.',
   note_cards: 'Номера карт начинаются с настоящего префикса платёжной системы и проходят проверку Луна, поэтому форма их примет; но они не привязаны ни к какому счёту, и платёж не пройдёт. Для тестового режима платёжного сервиса берите тестовые карты, которые он публикует.',
   note_seed: 'Каждый набор людей получается из seed, он показан выше. Тот же seed, страна и параметры дают тех же людей — в ссылке, в запросе к API, в тесте. Даты рождения отсчитываются от текущего года, так что люди стареют вместе со всеми.',
 
@@ -315,7 +321,10 @@ OWN.es = {
   /* ---- notes ---- */
   note_people: 'Haga clic en una fila para ver a esa persona en las tarjetas de arriba. El CSV tiene una columna por cada campo y una línea por cada persona.',
   note_documents: 'Los números de documento se construyen como los construye la autoridad que los expide: la fecha de nacimiento, el sexo y el lugar de nacimiento que lleva dentro un número coinciden con los de la persona, y cada dígito de control se calcula con el algoritmo propio de ese documento, así que los números pasan la validación de formato. Ninguno se ha expedido a nadie, y ningún registro lo confirmará.',
-  note_contacts: 'Las direcciones de correo están en example.com, example.net y example.org, dominios reservados para que el correo que se les envía no llegue a ninguna parte. Los teléfonos siguen el plan de numeración del país y pasan libphonenumber, la comprobación que usan la mayoría de los sitios; en Estados Unidos salen del bloque 555-0100–0199, reservado para la ficción. En otros países un número puede pertenecer a alguien, así que no llame a ese número ni le envíe mensajes.',
+  range_fiction: 'del bloque reservado para la ficción',
+  range_unallocated: 'de un bloque no asignado a nadie',
+  range_in_service: 'de un rango en servicio: puede pertenecer a alguien',
+  note_contacts: 'Las direcciones de correo están en example.com, example.net y example.org, dominios reservados para que el correo que se les envía no llegue a ninguna parte. Los teléfonos se escriben exactamente como en el país y, salvo en dos países, no son de nadie: en Estados Unidos, el Reino Unido y Francia salen de los bloques reservados para la ficción; en los demás, de bloques que el plan de numeración no ha asignado a ningún operador. libphonenumber, la comprobación que usan la mayoría de los sitios, lo sabe y solo acepta los estadounidenses. Rusia e India no tienen bloques así —todos sus prefijos móviles están en servicio—, de modo que sus números pueden pertenecer a alguien: no llame a esos números ni les envíe mensajes.',
   note_cards: 'Los números de tarjeta llevan el prefijo real de una red de tarjetas y pasan la comprobación de Luhn, así que un formulario los acepta; no pertenecen a ninguna cuenta, y ningún pago se completará. Para el modo de prueba de un proveedor de pagos, use las tarjetas de prueba que él mismo publica.',
   note_seed: 'Cada conjunto de personas sale de un seed, que se muestra arriba. El mismo seed, el mismo país y las mismas opciones devuelven las mismas personas — en un enlace, en una llamada a la API, en una prueba. Las fechas de nacimiento se cuentan desde el año en curso, así que las personas envejecen igual que todo el mundo.',
 
@@ -423,7 +432,10 @@ OWN.zh = {
   /* ---- notes ---- */
   note_people: '点击某一行，即可在上方的卡片中显示这个人。CSV 中每个字段占一列，每个人占一行。',
   note_documents: '证件号码按签发机关的规则构造：号码中包含的出生日期、性别和出生地与这个人的资料一致，每一位校验位都按该证件自己的算法计算，因此号码能通过格式校验。但这些号码从未签发给任何人，任何登记机构也不会确认它们。',
-  note_contacts: '电子邮箱地址位于 example.com、example.net 和 example.org —— 这些域名专门保留，发往它们的邮件不会送达任何地方。电话号码遵循该国的编号计划，能通过大多数网站所用的 libphonenumber 校验；在美国，号码取自 555-0100–0199，这是专门留给虚构作品的号段。在其他国家，号码可能属于某个真实的人，所以请不要拨打，也不要发短信。',
+  range_fiction: '取自留给虚构作品的号段',
+  range_unallocated: '取自未分配给任何人的号段',
+  range_in_service: '取自在用号段：可能属于真实的人',
+  note_contacts: '电子邮箱地址位于 example.com、example.net 和 example.org —— 这些域名专门保留，发往它们的邮件不会送达任何地方。电话号码的写法与该国完全一致，除两个国家外都不属于任何人：在美国、英国和法国，号码取自留给虚构作品的号段；在其他国家，取自编号计划尚未分配给任何运营商的号段。大多数网站所用的 libphonenumber 校验知道这一点，只接受美国的号码。俄罗斯和印度没有这样的号段——那里所有的手机号段都在使用中——所以这两国的号码可能属于某个真实的人，请不要拨打，也不要发短信。',
   note_cards: '卡号带有真实的卡组织前缀并能通过 Luhn 校验，因此表单会接受它们；但它们不属于任何账户，任何付款都不会成功。如果要使用支付服务商的测试模式，请使用其公布的测试卡号。',
   note_seed: '每一组人物都由一个 seed 生成，它显示在上方。相同的 seed、国家和选项会再次得到相同的人 —— 无论是在链接中、API 调用中还是测试中。出生日期从当前年份推算，所以这些人会和所有人一样一年年变老。',
 
@@ -531,7 +543,10 @@ OWN.hi = {
   /* ---- notes ---- */
   note_people: 'किसी पंक्ति पर क्लिक करें, तो वह व्यक्ति ऊपर के कार्डों में दिखेगा। CSV में हर फ़ील्ड के लिए एक कॉलम और हर व्यक्ति के लिए एक पंक्ति होती है।',
   note_documents: 'दस्तावेज़ों के नंबर उसी तरह बनाए जाते हैं जैसे उन्हें जारी करने वाली संस्था बनाती है: नंबर में दर्ज जन्म तिथि, लिंग और जन्म स्थान उस व्यक्ति से मेल खाते हैं, और हर चेक डिजिट की गणना उसी दस्तावेज़ के अपने एल्गोरिदम से की जाती है, इसलिए ये नंबर प्रारूप की जाँच में पास हो जाते हैं। इनमें से कोई भी नंबर किसी को जारी नहीं किया गया, और कोई भी रजिस्टर उनमें से किसी की पुष्टि नहीं करेगा।',
-  note_contacts: 'ईमेल पते example.com, example.net और example.org पर हैं — ये डोमेन आरक्षित हैं, ताकि उन पर भेजी गई मेल कहीं न पहुँचे। फ़ोन नंबर देश की नंबरिंग योजना के अनुसार होते हैं और libphonenumber में पास होते हैं, वही जाँच जो ज़्यादातर साइटें करती हैं; अमेरिका में वे 555-0100–0199 से लिए जाते हैं, जो फ़िल्मों और कहानियों के लिए रखा गया ब्लॉक है। बाक़ी देशों में कोई नंबर किसी का हो सकता है, इसलिए उस पर न कॉल करें, न SMS भेजें।',
+  range_fiction: 'काल्पनिक कहानियों के लिए रखे गए ब्लॉक से',
+  range_unallocated: 'किसी को आवंटित न किए गए ब्लॉक से',
+  range_in_service: 'चालू रेंज से: किसी का हो सकता है',
+  note_contacts: 'ईमेल पते example.com, example.net और example.org पर हैं — ये डोमेन आरक्षित हैं, ताकि उन पर भेजी गई मेल कहीं न पहुँचे। फ़ोन नंबर ठीक वैसे ही लिखे जाते हैं जैसे उस देश में लिखे जाते हैं, और दो देशों को छोड़कर किसी के नहीं होते: अमेरिका, ब्रिटेन और फ़्रांस में वे फ़िल्मों और कहानियों के लिए रखे गए ब्लॉकों से लिए जाते हैं, बाक़ी देशों में उन ब्लॉकों से जो नंबरिंग योजना ने किसी भी ऑपरेटर को आवंटित नहीं किए हैं। libphonenumber, वही जाँच जो ज़्यादातर साइटें करती हैं, यह जानती है और सिर्फ़ अमेरिकी नंबर स्वीकार करती है। रूस और भारत में ऐसे ब्लॉक नहीं हैं — वहाँ सभी मोबाइल प्रीफ़िक्स चालू हैं — इसलिए उनके नंबर किसी के हो सकते हैं: उन पर न कॉल करें, न SMS भेजें।',
   note_cards: 'कार्ड नंबर किसी असली कार्ड नेटवर्क के प्रीफ़िक्स से शुरू होते हैं और Luhn जाँच में पास होते हैं, इसलिए फ़ॉर्म उन्हें स्वीकार कर लेता है; पर वे किसी खाते से जुड़े नहीं हैं, और उनसे कोई भुगतान नहीं होगा। किसी भुगतान सेवा के टेस्ट मोड के लिए वे टेस्ट कार्ड इस्तेमाल करें जो वह सेवा ख़ुद प्रकाशित करती है।',
   note_seed: 'लोगों का हर समूह एक seed से बनता है, जो ऊपर दिखाया गया है। वही seed, वही देश और वही विकल्प फिर से वही लोग देते हैं — लिंक में, API कॉल में, टेस्ट में। जन्म तिथियाँ चालू वर्ष से गिनी जाती हैं, इसलिए बाक़ी सबकी तरह इन लोगों की उम्र भी बढ़ती जाती है।',
 
@@ -639,7 +654,10 @@ OWN.ar = {
   /* ---- notes ---- */
   note_people: 'انقر على أي صف لعرض ذلك الشخص في البطاقات أعلاه. وفي ملف CSV عمود لكل حقل وسطر لكل شخص.',
   note_documents: 'تُبنى أرقام الوثائق كما تبنيها الجهة المُصدِرة: فتاريخ الميلاد والجنس ومكان الميلاد المضمَّنة في الرقم تطابق بيانات الشخص، وكل رقم تحقق يُحسب بخوارزمية الوثيقة نفسها، لذلك تجتاز الأرقام فحص الصيغة. ولم يُصدَر أيٌّ منها لأحد، ولن يؤكد أي سجل رسمي أيًّا منها.',
-  note_contacts: 'عناوين البريد الإلكتروني على example.com وexample.net وexample.org — وهي نطاقات محجوزة كي لا يصل البريد المرسل إليها إلى أي مكان. وأرقام الهواتف تتبع خطة الترقيم في البلد وتجتاز libphonenumber، وهو الفحص الذي تعتمده معظم المواقع؛ وفي الولايات المتحدة تؤخذ من الأرقام 555-0100–0199 المخصصة للأعمال الخيالية. أما في البلدان الأخرى فقد يكون الرقم مملوكًا لأحدهم، فلا تتصل به ولا ترسل إليه رسائل نصية.',
+  range_fiction: 'من النطاق المخصص للأعمال الخيالية',
+  range_unallocated: 'من نطاق غير مخصص لأحد',
+  range_in_service: 'من نطاق مستخدم: قد يكون مملوكًا لأحدهم',
+  note_contacts: 'عناوين البريد الإلكتروني على example.com وexample.net وexample.org — وهي نطاقات محجوزة كي لا يصل البريد المرسل إليها إلى أي مكان. وأرقام الهواتف مكتوبة تمامًا كما تُكتب في البلد، ولا تخص أحدًا إلا في بلدين: ففي الولايات المتحدة والمملكة المتحدة وفرنسا تؤخذ من النطاقات المخصصة للأعمال الخيالية، وفي البلدان الأخرى من نطاقات لم تخصصها خطة الترقيم لأي مشغّل. ويعرف libphonenumber، وهو الفحص الذي تعتمده معظم المواقع، ذلك فلا يقبل إلا الأرقام الأمريكية. أما روسيا والهند فليس فيهما نطاقات كهذه، إذ إن جميع بادئات الجوال فيهما مستخدمة، لذا قد تكون أرقامهما مملوكة لأحدهم: فلا تتصل بها ولا ترسل إليها رسائل نصية.',
   note_cards: 'تحمل أرقام البطاقات بادئة حقيقية لشبكة دفع وتجتاز فحص Luhn، فيقبلها النموذج؛ لكنها لا ترتبط بأي حساب، ولن تمرّ بها أي عملية دفع. ولوضع الاختبار لدى مزوّد خدمة دفع، استخدم بطاقات الاختبار التي ينشرها المزوّد نفسه.',
   note_seed: 'تنشأ كل مجموعة من الأشخاص من قيمة seed المعروضة أعلاه. وبقيمة seed نفسها والبلد نفسه والخيارات نفسها يعود الأشخاص أنفسهم — في رابط، أو في استدعاء للواجهة البرمجية، أو في اختبار. وتُحسب تواريخ الميلاد من السنة الجارية، فيكبر هؤلاء الأشخاص في السن مع الجميع.',
 
@@ -747,7 +765,10 @@ OWN.pt = {
   /* ---- notes ---- */
   note_people: 'Clique numa linha para mostrar essa pessoa nos cartões acima. O CSV tem uma coluna para cada campo e uma linha para cada pessoa.',
   note_documents: 'Os números de documentos são montados do jeito que o órgão emissor os monta: a data de nascimento, o sexo e o local de nascimento contidos num número batem com os da pessoa, e cada dígito verificador é calculado pelo algoritmo próprio daquele documento, então os números passam na validação de formato. Nenhum deles foi emitido para ninguém, e nenhum registro oficial vai confirmá-los.',
-  note_contacts: 'Os e-mails ficam em example.com, example.net e example.org — domínios reservados para que mensagens enviadas a eles não cheguem a lugar nenhum. Os telefones seguem o plano de numeração do país e passam no libphonenumber, a verificação que a maioria dos sites usa; nos Estados Unidos eles vêm do bloco 555-0100–0199, reservado para a ficção. Em outros países um número pode pertencer a alguém, então não ligue nem mande mensagem para ele.',
+  range_fiction: 'do bloco reservado para a ficção',
+  range_unallocated: 'de um bloco não atribuído a ninguém',
+  range_in_service: 'de uma faixa em uso: pode pertencer a alguém',
+  note_contacts: 'Os e-mails ficam em example.com, example.net e example.org — domínios reservados para que mensagens enviadas a eles não cheguem a lugar nenhum. Os telefones são escritos exatamente como no país e, exceto em dois países, não pertencem a ninguém: nos Estados Unidos, no Reino Unido e na França vêm dos blocos reservados para a ficção; nos demais, de blocos que o plano de numeração não atribuiu a nenhuma operadora. O libphonenumber, a verificação que a maioria dos sites usa, sabe disso e só aceita os americanos. Rússia e Índia não têm blocos assim — todos os prefixos móveis estão em uso —, então os números delas podem pertencer a alguém: não ligue nem mande mensagem para eles.',
   note_cards: 'Os números de cartão têm o prefixo real de uma bandeira e passam na verificação de Luhn, então um formulário os aceita; eles não pertencem a nenhuma conta, e nenhum pagamento vai passar. Para o modo de teste de um provedor de pagamentos, use os cartões de teste que ele publica.',
   note_seed: 'Cada conjunto de pessoas vem de uma seed, mostrada acima. A mesma seed, o mesmo país e as mesmas opções trazem de volta as mesmas pessoas — num link, numa chamada à API, num teste. As datas de nascimento são contadas a partir do ano corrente, então as pessoas envelhecem junto com todo mundo.',
 
@@ -855,7 +876,10 @@ OWN.fr = {
   /* ---- notes ---- */
   note_people: 'Cliquez sur une ligne pour afficher cette personne dans les cartes ci-dessus. Le fichier CSV contient une colonne par champ et une ligne par personne.',
   note_documents: 'Les numéros de documents sont composés comme le fait l’autorité qui les délivre : la date de naissance, le sexe et le lieu de naissance contenus dans un numéro correspondent à la personne, et chaque chiffre de contrôle est calculé selon l’algorithme propre à ce document ; les numéros passent donc la validation de format. Aucun n’a été délivré à qui que ce soit, et aucun registre n’en confirmera l’existence.',
-  note_contacts: 'Les adresses e-mail sont sur example.com, example.net et example.org — des domaines réservés pour que le courrier qui leur est adressé n’arrive nulle part. Les numéros de téléphone suivent le plan de numérotation du pays et passent libphonenumber, la vérification qu’utilisent la plupart des sites ; aux États-Unis, ils sont pris dans la plage 555-0100–0199, réservée à la fiction. Ailleurs, un numéro peut appartenir à quelqu’un : ne l’appelez pas et ne lui envoyez pas de SMS.',
+  range_fiction: 'de la plage réservée à la fiction',
+  range_unallocated: 'd’un bloc attribué à personne',
+  range_in_service: 'd’une plage en service : peut appartenir à quelqu’un',
+  note_contacts: 'Les adresses e-mail sont sur example.com, example.net et example.org — des domaines réservés pour que le courrier qui leur est adressé n’arrive nulle part. Les numéros de téléphone sont écrits exactement comme dans le pays et, sauf dans deux pays, n’appartiennent à personne : aux États-Unis, au Royaume-Uni et en France, ils sont pris dans les plages réservées à la fiction ; ailleurs, dans des blocs que le plan de numérotation n’a attribués à aucun opérateur. libphonenumber, la vérification qu’utilisent la plupart des sites, le sait et n’accepte que les numéros américains. La Russie et l’Inde n’ont pas de tels blocs — tous leurs préfixes mobiles sont en service —, leurs numéros peuvent donc appartenir à quelqu’un : ne les appelez pas et ne leur envoyez pas de SMS.',
   note_cards: 'Les numéros de carte commencent par un véritable préfixe de réseau et passent le contrôle de Luhn, si bien qu’un formulaire les accepte ; ils ne sont liés à aucun compte, et aucun paiement n’aboutira. Pour le mode test d’un prestataire de paiement, utilisez les cartes de test qu’il publie.',
   note_seed: 'Chaque ensemble de personnes est issu d’un seed, affiché ci-dessus. Le même seed, le même pays et les mêmes options redonnent les mêmes personnes — dans un lien, dans un appel d’API, dans un test. Les dates de naissance sont calculées à partir de l’année en cours : les personnes vieillissent donc comme tout le monde.',
 
@@ -963,7 +987,10 @@ OWN.de = {
   /* ---- Hinweise ---- */
   note_people: 'Klicken Sie auf eine Zeile, um diese Person in den Karten oben anzuzeigen. Die CSV-Datei enthält eine Spalte für jedes Feld und eine Zeile für jede Person.',
   note_documents: 'Dokumentnummern werden so gebildet, wie die ausstellende Behörde sie bildet: Geburtsdatum, Geschlecht und Geburtsort in einer Nummer stimmen mit der Person überein, und jede Prüfziffer wird nach dem eigenen Algorithmus des jeweiligen Dokuments berechnet, sodass die Nummern die Formatprüfung bestehen. Keine davon wurde je an jemanden ausgegeben, und kein Register wird sie bestätigen.',
-  note_contacts: 'E-Mail-Adressen liegen unter example.com, example.net und example.org — Domains, die dafür reserviert sind, dass an sie gesendete Mails nirgendwo ankommen. Telefonnummern folgen dem Rufnummernplan des Landes und bestehen libphonenumber, die Prüfung, die die meisten Websites verwenden; in den USA stammen sie aus 555-0100–0199, dem für fiktive Zwecke reservierten Block. Anderswo kann eine Nummer jemandem gehören — rufen Sie sie daher nicht an und schicken Sie keine SMS daran.',
+  range_fiction: 'aus dem für fiktive Zwecke reservierten Block',
+  range_unallocated: 'aus einem keinem Netz zugeteilten Block',
+  range_in_service: 'aus einem vergebenen Bereich: kann jemandem gehören',
+  note_contacts: 'E-Mail-Adressen liegen unter example.com, example.net und example.org — Domains, die dafür reserviert sind, dass an sie gesendete Mails nirgendwo ankommen. Telefonnummern sind genau so geschrieben wie im jeweiligen Land und gehören bis auf zwei Länder niemandem: In den USA, im Vereinigten Königreich und in Frankreich stammen sie aus den für fiktive Zwecke reservierten Blöcken, anderswo aus Blöcken, die der Rufnummernplan keinem Netzbetreiber zugeteilt hat. libphonenumber, die Prüfung, die die meisten Websites verwenden, weiß das und akzeptiert nur die amerikanischen. Russland und Indien haben keine solchen Blöcke — dort sind alle Mobilfunkvorwahlen vergeben —, ihre Nummern können also jemandem gehören: Rufen Sie sie nicht an und schicken Sie keine SMS daran.',
   note_cards: 'Kartennummern tragen ein echtes Präfix eines Kartennetzwerks und bestehen die Luhn-Prüfung, ein Formular akzeptiert sie also; sie gehören zu keinem Konto, und keine Zahlung wird ausgeführt. Für den Testmodus eines Zahlungsanbieters nutzen Sie die Testkarten, die er veröffentlicht.',
   note_seed: 'Jede Gruppe von Personen entsteht aus einem Seed, der oben angezeigt wird. Derselbe Seed, dasselbe Land und dieselben Optionen ergeben wieder dieselben Personen — in einem Link, in einem API-Aufruf, in einem Test. Geburtsdaten werden vom aktuellen Jahr aus berechnet, die Personen werden also mit allen anderen zusammen älter.',
 
@@ -1071,7 +1098,10 @@ OWN.ja = {
   /* ---- notes ---- */
   note_people: '行をクリックすると、その人物が上のカードに表示されます。CSV には項目ごとに一列、人物ごとに一行があります。',
   note_documents: '書類の番号は、発行機関と同じやり方で組み立てています。番号に含まれる生年月日・性別・出生地はその人物と一致し、チェックディジットはどれもその書類固有のアルゴリズムで計算しているので、形式の検証は通ります。ただし、どれも誰かに発行された番号ではなく、どの台帳に照会しても確認は取れません。',
-  note_contacts: 'メールアドレスは example.com、example.net、example.org のものです。これらは予約済みのドメインで、送ったメールはどこにも届きません。電話番号はその国の番号計画に従い、多くのサイトが検証に使う libphonenumber を通ります。アメリカでは、フィクション用に確保された 555-0100–0199 の範囲から選んでいます。それ以外の国では番号が実在の誰かのものかもしれないので、電話をかけたり SMS を送ったりしないでください。',
+  range_fiction: 'フィクション用の範囲から',
+  range_unallocated: 'どこにも割り当てられていない範囲から',
+  range_in_service: '使用中の範囲から：実在の誰かのものかもしれません',
+  note_contacts: 'メールアドレスは example.com、example.net、example.org のものです。これらは予約済みのドメインで、送ったメールはどこにも届きません。電話番号はその国の書き方どおりですが、2 か国を除いて誰のものでもありません。アメリカ・イギリス・フランスではフィクション用に確保された範囲から、それ以外の国では番号計画がどの事業者にも割り当てていない範囲から選んでいます。多くのサイトが検証に使う libphonenumber はそれを知っていて、受け付けるのはアメリカの番号だけです。ロシアとインドにはそうした範囲がなく、携帯電話の番号帯はすべて使用中なので、両国の番号は実在の誰かのものかもしれません。電話をかけたり SMS を送ったりしないでください。',
   note_cards: 'カード番号には実在する国際ブランドのプレフィックスが付いていて、Luhn チェックも通るので、フォームには受け付けられます。ただし、どの口座にも結びついておらず、決済は成立しません。決済サービスのテストモードでは、そのサービスが公開しているテスト用カードを使ってください。',
   note_seed: '人物のセットはどれも、上に表示されている seed から作られます。同じ seed、国、オプションからは、リンクでも API 呼び出しでもテストでも、同じ人物がもう一度得られます。生年月日は今年を基準に数えるので、人物たちもほかの誰とも同じように年を取っていきます。',
 
@@ -1179,7 +1209,10 @@ OWN.tr = {
   /* ---- notlar ---- */
   note_people: 'Bir kişiyi yukarıdaki kartlarda görmek için onun satırına tıklayın. CSV’de her alan için bir sütun, her kişi için bir satır vardır.',
   note_documents: 'Belge numaraları, onları düzenleyen kurumun kullandığı yöntemle oluşturulur: numaranın içindeki doğum tarihi, cinsiyet ve doğum yeri kişiyle uyuşur, her kontrol basamağı da o belgenin kendi algoritmasıyla hesaplanır; bu yüzden numaralar biçim doğrulamasından geçer. Hiçbiri kimseye verilmemiştir ve hiçbir kayıt sistemi bunlardan birini doğrulamaz.',
-  note_contacts: 'E-posta adresleri example.com, example.net ve example.org alan adlarındadır: bu alan adları, gönderilen postalar hiçbir yere ulaşmasın diye ayrılmıştır. Telefon numaraları ülkenin numaralandırma planına uyar ve çoğu sitenin kullandığı libphonenumber denetiminden geçer; ABD’de ise kurgu eserleri için ayrılmış 555-0100–0199 bloğundan alınır. Başka ülkelerde bir numara birine ait olabilir; bu yüzden o numarayı aramayın ve ona mesaj göndermeyin.',
+  range_fiction: 'kurgu eserleri için ayrılmış bloktan',
+  range_unallocated: 'kimseye tahsis edilmemiş bir bloktan',
+  range_in_service: 'kullanımdaki bir aralıktan: birine ait olabilir',
+  note_contacts: 'E-posta adresleri example.com, example.net ve example.org alan adlarındadır: bu alan adları, gönderilen postalar hiçbir yere ulaşmasın diye ayrılmıştır. Telefon numaraları ülkede yazıldığı biçimin aynısıdır ve iki ülke dışında kimseye ait değildir: ABD, Birleşik Krallık ve Fransa’da kurgu eserleri için ayrılmış bloklardan, diğer ülkelerde ise numaralandırma planının hiçbir operatöre tahsis etmediği bloklardan alınır. Çoğu sitenin kullandığı libphonenumber denetimi bunu bilir ve yalnızca ABD numaralarını kabul eder. Rusya ve Hindistan’da böyle bloklar yoktur, oradaki bütün mobil önekler kullanımdadır; bu yüzden bu ülkelerin numaraları birine ait olabilir: onları aramayın ve onlara mesaj göndermeyin.',
   note_cards: 'Kart numaraları gerçek bir kart ağının önekiyle başlar ve Luhn denetiminden geçer, bu yüzden formlar onları kabul eder; ama hiçbir hesaba ait değildir ve hiçbir ödeme gerçekleşmez. Bir ödeme sağlayıcısının test modu için o sağlayıcının yayımladığı test kartlarını kullanın.',
   note_seed: 'Her kişi grubu bir seed değerinden oluşturulur; bu değer yukarıda gösterilir. Aynı seed, ülke ve seçenekler aynı kişileri yeniden verir — bir bağlantıda, bir API çağrısında, bir testte. Doğum tarihleri içinde bulunulan yıla göre hesaplanır, bu yüzden kişiler de herkes gibi yaşlanır.',
 
@@ -1287,7 +1320,10 @@ OWN.uk = {
   /* ---- примітки ---- */
   note_people: 'Натисніть на рядок, щоб показати цю людину в картках вище. У CSV — стовпець на кожне поле й рядок на кожну людину.',
   note_documents: 'Номери документів складено так, як їх складає орган, що їх видає: дата народження, стать і місце народження всередині номера збігаються з даними людини, а кожну контрольну цифру обчислено за алгоритмом саме цього документа, тож номери проходять перевірку формату. Жоден із них нікому не видавали, і жоден реєстр його не підтвердить.',
-  note_contacts: 'Адреси електронної пошти — на example.com, example.net і example.org: ці домени зарезервовано, і листи на них нікуди не доходять. Телефони відповідають плану нумерації країни й проходять libphonenumber — перевірку, якою користується більшість сайтів; у США їх беруть із блоку 555-0100–0199, відведеного для художніх творів. В інших країнах номер може комусь належати, тож не телефонуйте на нього й не надсилайте SMS.',
+  range_fiction: 'з блоку, відведеного для художніх творів',
+  range_unallocated: 'з блоку, не виділеного нікому',
+  range_in_service: 'з діапазону, що використовується: може комусь належати',
+  note_contacts: 'Адреси електронної пошти — на example.com, example.net і example.org: ці домени зарезервовано, і листи на них нікуди не доходять. Телефони записано точно так, як їх пишуть у країні, і майже скрізь вони нікому не належать: у США, Великій Британії та Франції їх беруть із блоків, відведених для художніх творів, в інших країнах — із блоків, які план нумерації не виділив жодному операторові. libphonenumber — перевірка, якою користується більшість сайтів, — знає про це й приймає лише американські. У Росії та Індії таких блоків немає: усі мобільні префікси там використовуються, тож їхні номери можуть комусь належати — не телефонуйте на них і не надсилайте SMS.',
   note_cards: 'Номери карток починаються зі справжнього префікса платіжної системи й проходять перевірку за алгоритмом Луна, тож форма їх прийме; але вони не прив’язані до жодного рахунку, і платіж не пройде. Для тестового режиму платіжного сервісу беріть тестові картки, які він публікує.',
   note_seed: 'Кожен набір людей генерується із seed, показаного вище. Той самий seed, країна й параметри дають тих самих людей — у посиланні, у запиті до API, у тесті. Дати народження відлічуються від поточного року, тож люди старішають разом з усіма.',
 

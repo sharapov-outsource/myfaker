@@ -172,6 +172,11 @@ function address(r, place) {
   };
 }
 
+/*
+ * Russia keeps no block for fiction, and the numbering plan opens every 9xx
+ * code to mobile networks: a number written as a Russian mobile may belong to
+ * somebody, and the report says so.
+ */
 function phone(r) {
   const code = String(r.int(900, 999));
   const rest = r.digits(7);
@@ -180,6 +185,7 @@ function phone(r) {
     national: `8 (${code}) ${tail}`,
     international: `+7 ${code} ${tail}`,
     e164: `+7${code}${rest}`,
+    range: 'in-service',
   };
 }
 

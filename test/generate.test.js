@@ -173,6 +173,18 @@ test('every person of every country has what a form asks for', () => {
   }
 });
 
+test('a phone number is nobody’s wherever the numbering plan allows it', () => {
+  const fiction = ['us', 'gb', 'fr'];
+  const inService = ['ru', 'in'];
+  for (const country of COUNTRY_IDS) {
+    const expected = fiction.includes(country) ? 'fiction' : inService.includes(country) ? 'in-service' : 'unallocated';
+    for (const person of people(country, { count: 30 })) assert.equal(person.phone.range, expected, country);
+  }
+  for (const person of people('us', { count: 30 })) assert.match(person.phone.national, /^\(\d{3}\) 555-01\d\d$/);
+  for (const person of people('gb', { count: 30 })) assert.match(person.phone.national, /^07700 900\d{3}$/);
+  for (const person of people('fr', { count: 30 })) assert.match(person.phone.national, /^06 39 98 \d\d \d\d$/);
+});
+
 test('the page and the server know the same countries', () => {
   const app = readFileSync(new URL('../public/app.js', import.meta.url), 'utf8');
   const listed = JSON.parse(/const COUNTRIES = (\[[^\]]+\]);/.exec(app)[1].replace(/'/g, '"'));

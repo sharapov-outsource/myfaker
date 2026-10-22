@@ -95,13 +95,14 @@ function address(r, place) {
   };
 }
 
-const MOBILE = ['501', '505', '506', '507', '530', '531', '532', '533', '534', '535', '536', '537', '538', '539', '541', '542', '543', '544', '545', '546', '547', '548', '549', '551', '552', '553', '554', '555', '559'];
+/* 5xx codes like the operators' 50x–55x, but allocated to nobody. */
+const UNALLOCATED = ['511', '513', '514', '515', '517', '518', '519', '520', '521', '522', '523', '525', '526', '527', '528', '529', '560', '563', '565', '566', '567', '568', '569', '570', '571', '573', '576', '577', '578'];
 
 function phone(r) {
-  const code = r.pick(MOBILE);
+  const code = r.pick(UNALLOCATED);
   const rest = r.digits(7);
   const tail = `${rest.slice(0, 3)} ${rest.slice(3, 5)} ${rest.slice(5)}`;
-  return { national: `0${code} ${tail}`, international: `+90 ${code} ${tail}`, e164: `+90${code}${rest}` };
+  return { national: `0${code} ${tail}`, international: `+90 ${code} ${tail}`, e164: `+90${code}${rest}`, range: 'unallocated' };
 }
 
 function documents(r) {

@@ -89,13 +89,12 @@ function address(r, place) {
   };
 }
 
-const MOBILE = ['50', '53', '54', '55', '56', '58', '59'];
-
+/* 05x: mobiles are 050, 053–056, 058 and 059; 052 is given to nobody. */
 function phone(r) {
-  const code = r.pick(MOBILE);
+  const code = '52';
   const rest = r.digits(7);
   const tail = `${rest.slice(0, 3)} ${rest.slice(3)}`;
-  return { national: `0${code} ${tail}`, international: `+966 ${code} ${tail}`, e164: `+966${code}${rest}` };
+  return { national: `0${code} ${tail}`, international: `+966 ${code} ${tail}`, e164: `+966${code}${rest}`, range: 'unallocated' };
 }
 
 function documents(r) {

@@ -114,13 +114,12 @@ function address(r, place) {
   };
 }
 
-const MOBILE = ['320', '324', '327', '328', '329', '330', '331', '333', '334', '335', '338', '339', '340', '345', '347', '348', '349', '351', '366', '380', '388', '389', '391', '392', '393'];
-
+/* Mobiles open with 31–39; 30x has not been given to any network. */
 function phone(r) {
-  const prefix = r.pick(MOBILE);
+  const prefix = '30' + r.digits(1);
   const rest = r.digits(7);
   const spaced = `${prefix} ${rest.slice(0, 3)} ${rest.slice(3)}`;
-  return { national: spaced, international: `+39 ${spaced}`, e164: `+39${prefix}${rest}` };
+  return { national: spaced, international: `+39 ${spaced}`, e164: `+39${prefix}${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

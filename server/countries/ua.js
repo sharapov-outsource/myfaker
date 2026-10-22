@@ -126,13 +126,14 @@ function address(r, place) {
   return { street, building, apartment, city: place.city, region: place.region, postalCode, lines, line: lines.join(', ') };
 }
 
-const MOBILE = ['50', '63', '66', '67', '68', '73', '93', '95', '96', '97', '98', '99'];
+/* Two-digit codes like the operators' 050, 063, 073 or 099, but given to nobody. */
+const UNALLOCATED = ['60', '70', '74', '76', '78'];
 
 function phone(r) {
-  const code = r.pick(MOBILE);
+  const code = r.pick(UNALLOCATED);
   const rest = r.digits(7);
   const tail = `${rest.slice(0, 3)} ${rest.slice(3, 5)} ${rest.slice(5)}`;
-  return { national: `0${code} ${tail}`, international: `+380 ${code} ${tail}`, e164: `+380${code}${rest}` };
+  return { national: `0${code} ${tail}`, international: `+380 ${code} ${tail}`, e164: `+380${code}${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

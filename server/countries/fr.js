@@ -6,9 +6,9 @@
  * and in Paris, Marseille and Lyon a postcode that names the arrondissement.
  * The social security number (NIR) is the person written down — sex, year and
  * month of birth, the département and commune they were born in — closed by
- * its key; the tax number carries its own check. ARCEP keeps 06 39 98 for
- * fiction, but libphonenumber refuses it, so mobile numbers come from ranges
- * in service — a form has to accept them. An IBAN whose RIB key is right
+ * its key; the tax number carries its own check. Mobile numbers come from
+ * 06 39 98, the block ARCEP keeps for fiction: they reach nobody, and
+ * libphonenumber, which knows that, refuses them. An IBAN whose RIB key is right
  * as well as its IBAN check, and for a business a SIREN, a SIRET and a VAT
  * number that agree with each other.
  */
@@ -115,13 +115,13 @@ function address(r, place) {
 }
 
 function phone(r) {
-  const prefix = r.weighted([['6' + r.from('01245678'), 3], ['7' + r.from('3456789'), 1]]);
-  const rest = r.digits(7);
-  const tail = `${rest.slice(0, 1)} ${rest.slice(1, 3)} ${rest.slice(3, 5)} ${rest.slice(5)}`;
+  const rest = r.digits(4);
+  const tail = `${rest.slice(0, 2)} ${rest.slice(2)}`;
   return {
-    national: `0${prefix[0]} ${prefix[1]}${tail}`,
-    international: `+33 ${prefix[0]} ${prefix[1]}${tail}`,
-    e164: `+33${prefix}${rest}`,
+    national: `06 39 98 ${tail}`,
+    international: `+33 6 39 98 ${tail}`,
+    e164: `+3363998${rest}`,
+    range: 'fiction',
   };
 }
 

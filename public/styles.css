@@ -49,6 +49,7 @@
   display: block; margin-top: 1px;
   font-size: 11px; color: var(--ink-faint);
 }
+.row .k small.warn { color: var(--warn) }
 .row.sub { padding-inline-start: 14px }
 .row.sub .k { font-size: 12px }
 .row .v { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px 8px }

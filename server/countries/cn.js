@@ -100,14 +100,14 @@ function address(r, place) {
   };
 }
 
-const MOBILE = ('130 131 132 133 134 135 136 137 138 139 150 151 152 153 155 156 157 158 159 166 173 175 176 ' +
-  '177 178 180 181 182 183 184 185 186 187 188 189 191 193 195 198 199').split(' ');
+/* Mobile prefixes no operator has been given: written like a 138, ringing nowhere. */
+const UNALLOCATED = ['154', '160', '163', '164', '168', '169', '179'];
 
 function phone(r) {
-  const prefix = r.pick(MOBILE);
+  const prefix = r.pick(UNALLOCATED);
   const rest = r.digits(8);
   const spaced = `${prefix} ${rest.slice(0, 4)} ${rest.slice(4)}`;
-  return { national: spaced, international: `+86 ${spaced}`, e164: `+86${prefix}${rest}` };
+  return { national: spaced, international: `+86 ${spaced}`, e164: `+86${prefix}${rest}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

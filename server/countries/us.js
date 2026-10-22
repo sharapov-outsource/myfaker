@@ -107,7 +107,7 @@ function phone(r, place) {
     national: `(${area}) 555-${line}`,
     international: `+1 ${area}-555-${line}`,
     e164: `+1${area}555${line}`,
-    fictional: true,
+    range: 'fiction',
   };
 }
 

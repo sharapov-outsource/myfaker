@@ -99,9 +99,10 @@ function address(r, place) {
   return { street, building, city: place.city, region: place.province, postalCode, lines, line: lines.join(', ') };
 }
 
+/* Mobiles are 06 1… to 06 5… and 06 8…; 06 0…, 06 7… and 06 9… are allocated to nobody. */
 function phone(r) {
-  const rest = r.from('12345') + r.digits(7);
-  return { national: `06 ${rest}`, international: `+31 6 ${rest}`, e164: `+316${rest}` };
+  const rest = r.from('079') + r.digits(7);
+  return { national: `06 ${rest}`, international: `+31 6 ${rest}`, e164: `+316${rest}`, range: 'unallocated' };
 }
 
 function documents(r) {

@@ -3,7 +3,7 @@
  *
  * A given name and the father's and mother's surnames. An address with the
  * colonia on a line of its own and the state abbreviated after the town, and a
- * ten-digit phone number under the city's area code. The CURP and the RFC are
+ * ten-digit phone number under an area code that does not exist. The CURP and the RFC are
  * worked out from this person's own names, birth date, sex and state of birth,
  * with the substitutions RENAPO and the SAT make for awkward words; the
  * homoclave of an RFC is assigned by the SAT and is invented here, its check
@@ -28,18 +28,18 @@ const SURNAMES = ('Hernández García Martínez López González Pérez Rodrígu
 
 /* curp — the two letters a CURP gives the state of birth. */
 const CITIES = [
-  { city: 'Ciudad de México', state: 'Ciudad de México', abbr: 'CDMX', curp: 'DF', cp: [1000, 16999], area: '55' },
-  { city: 'Guadalajara', state: 'Jalisco', abbr: 'Jal.', curp: 'JC', cp: [44100, 44990], area: '33' },
-  { city: 'Monterrey', state: 'Nuevo León', abbr: 'N.L.', curp: 'NL', cp: [64000, 64999], area: '81' },
-  { city: 'Puebla', state: 'Puebla', abbr: 'Pue.', curp: 'PL', cp: [72000, 72599], area: '222' },
-  { city: 'Tijuana', state: 'Baja California', abbr: 'B.C.', curp: 'BC', cp: [22000, 22699], area: '664' },
-  { city: 'León', state: 'Guanajuato', abbr: 'Gto.', curp: 'GT', cp: [37000, 37699], area: '477' },
-  { city: 'Querétaro', state: 'Querétaro', abbr: 'Qro.', curp: 'QT', cp: [76000, 76246], area: '442' },
-  { city: 'Mérida', state: 'Yucatán', abbr: 'Yuc.', curp: 'YN', cp: [97000, 97399], area: '999' },
-  { city: 'Cancún', state: 'Quintana Roo', abbr: 'Q.R.', curp: 'QR', cp: [77500, 77599], area: '998' },
-  { city: 'Toluca', state: 'Estado de México', abbr: 'Méx.', curp: 'MC', cp: [50000, 50299], area: '722' },
-  { city: 'San Luis Potosí', state: 'San Luis Potosí', abbr: 'S.L.P.', curp: 'SP', cp: [78000, 78499], area: '444' },
-  { city: 'Aguascalientes', state: 'Aguascalientes', abbr: 'Ags.', curp: 'AS', cp: [20000, 20399], area: '449' },
+  { city: 'Ciudad de México', state: 'Ciudad de México', abbr: 'CDMX', curp: 'DF', cp: [1000, 16999] },
+  { city: 'Guadalajara', state: 'Jalisco', abbr: 'Jal.', curp: 'JC', cp: [44100, 44990] },
+  { city: 'Monterrey', state: 'Nuevo León', abbr: 'N.L.', curp: 'NL', cp: [64000, 64999] },
+  { city: 'Puebla', state: 'Puebla', abbr: 'Pue.', curp: 'PL', cp: [72000, 72599] },
+  { city: 'Tijuana', state: 'Baja California', abbr: 'B.C.', curp: 'BC', cp: [22000, 22699] },
+  { city: 'León', state: 'Guanajuato', abbr: 'Gto.', curp: 'GT', cp: [37000, 37699] },
+  { city: 'Querétaro', state: 'Querétaro', abbr: 'Qro.', curp: 'QT', cp: [76000, 76246] },
+  { city: 'Mérida', state: 'Yucatán', abbr: 'Yuc.', curp: 'YN', cp: [97000, 97399] },
+  { city: 'Cancún', state: 'Quintana Roo', abbr: 'Q.R.', curp: 'QR', cp: [77500, 77599] },
+  { city: 'Toluca', state: 'Estado de México', abbr: 'Méx.', curp: 'MC', cp: [50000, 50299] },
+  { city: 'San Luis Potosí', state: 'San Luis Potosí', abbr: 'S.L.P.', curp: 'SP', cp: [78000, 78499] },
+  { city: 'Aguascalientes', state: 'Aguascalientes', abbr: 'Ags.', curp: 'AS', cp: [20000, 20399] },
 ];
 
 const COLONIAS = 'Centro|Del Valle|Jardines del Valle|Las Américas|Reforma|Lomas Verdes|San Miguel|Moderna|Industrial|Insurgentes|Juárez|Obrera|Hidalgo|Benito Juárez|Santa María'.split('|');
@@ -153,12 +153,17 @@ function address(r, place) {
   };
 }
 
-function phone(r, place) {
-  const rest = r.from('23456789') + r.digits(9 - place.area.length);
-  const local = place.area.length === 2
-    ? `${place.area} ${rest.slice(0, 4)} ${rest.slice(4)}`
-    : `${place.area} ${rest.slice(0, 3)} ${rest.slice(3)}`;
-  return { national: local, international: `+52 ${local}`, e164: `+52${place.area}${rest}` };
+/*
+ * Openings no area code starts with. A number under one is written like any
+ * number under a three-digit area code and reaches nobody; the price is that
+ * it no longer matches the city.
+ */
+const UNASSIGNED = ['21', '25', '26', '36', '40', '51', '52', '53', '54', '57', '60', '70', '85', '94'];
+
+function phone(r) {
+  const number = r.pick(UNASSIGNED) + r.digits(8);
+  const local = `${number.slice(0, 3)} ${number.slice(3, 6)} ${number.slice(6)}`;
+  return { national: local, international: `+52 ${local}`, e164: `+52${number}`, range: 'unallocated' };
 }
 
 function documents(r, p) {

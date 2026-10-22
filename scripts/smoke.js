@@ -122,7 +122,7 @@ async function run() {
     check(`${country}: IBANs are valid`, people.every(person =>
       (person.bank?.fields || []).filter(field => field.id === 'iban').every(field => ibanValid(field.raw))));
     check(`${country}: labelled`, typeof report.countryName === 'string' &&
-      people.every(person => person.genderLabel && person.documents.every(doc => doc.kindLabel)));
+      people.every(person => person.genderLabel && person.phone.rangeLabel && person.documents.every(doc => doc.kindLabel)));
   }
 
   /* ---------------- the seed ---------------- */
